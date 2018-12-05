@@ -1,18 +1,18 @@
 ' ********** Copyright 2015 Roku Corp.  All Rights Reserved. ********** 
 
 Sub RunUserInterface()
-    screen = CreateObject("roSGScreen")
-    scene = screen.CreateScene("HomeScene")
-    port = CreateObject("roMessagePort")
-    screen.SetMessagePort(port)
-    screen.Show()
+    homeScreen = CreateObject("roSGScreen")
+    homeScene = homeScreen.CreateScene("HomeScene")
+    messagePort = CreateObject("roMessagePort")
+    homeScreen.SetMessagePort(messagePort)
+    homeScreen.Show()
     
-    rows = GetApiArray("172.16.254.20")
+    recordings = GetApiRecordings("172.16.254.20")
 
-    scene.gridContent = ParseXMLContent(rows)
+    homeScene.gridContent = ObjectToContentNode(recordings)
 
     while true
-        msg = wait(0, port)
+        msg = wait(0, messagePort)
         print "------------------"
         print "msg = "; msg
     end while
@@ -24,14 +24,15 @@ Sub RunUserInterface()
 End Sub
 
 
-Function ParseXMLContent(rows As Object)
+Function ObjectToContentNode(rows As Object)
     print("Parsing")
     RowItems = createObject("RoSGNode","ContentNode")
-    index = 0
+
     for each rowAA in rows
         row = createObject("RoSGNode","ContentNode")
         row.Title = rowAA.title
 
+        index = 0
         for each video in rowAA.videos
             item = createObject("RoSGNode","ContentNode")
 
@@ -47,6 +48,11 @@ Function ParseXMLContent(rows As Object)
                 item[key] = video[key]
             end for
             row.appendChild(item)
+
+            index = index + 1
+            if index > 5 then
+                exit for
+            end if
         end for
         RowItems.appendChild(row)
     end for
@@ -57,13 +63,8 @@ Function ParseXMLContent(rows As Object)
 End Function
 
 
-Function GetApiArray(host)
-    url = CreateObject("roUrlTransfer")
-    url.SetUrl("http://" + host + ":6544/Dvr/GetRecordedList")
-    url.AddHeader("accept", "application/json")
-    rsp = url.GetToString()
-
-    jsonObject = ParseJSON(rsp)
+Function GetApiRecordings(host)
+    jsonObject = GetApiData("http://" + host + ":6544/Dvr/GetRecordedList")
 
     result = []
 
@@ -116,10 +117,15 @@ Function GetApiArray(host)
     return result
 End Function
 
+Function GetApiVideos(host)
+    return {}
+End Function
 
-Function ParseXML(str As String) As dynamic
-    if str = invalid return invalid
-    xml=CreateObject("roXMLElement")
-    if not xml.Parse(str) return invalid
-    return xml
+Function GetApiData(apiPath)
+    urlTransfer = CreateObject("roUrlTransfer")
+    urlTransfer.SetUrl(apiPath)
+    urlTransfer.AddHeader("accept", "application/json")
+    response = urlTransfer.GetToString()
+
+    return ParseJSON(response)
 End Function
