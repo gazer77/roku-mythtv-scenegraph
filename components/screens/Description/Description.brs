@@ -13,8 +13,6 @@ End Sub
 Sub OnContentChanged()
     item = m.top.content
 
-    'i = 1 / 0
-
     title = item.title.toStr()
     if title <> invalid then
         m.top.Title.text = title.toStr()

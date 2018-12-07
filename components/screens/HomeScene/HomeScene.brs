@@ -17,7 +17,23 @@ Function Init()
     
     ' loading indicator starts at initializatio of channel
     m.loadingIndicator = m.top.findNode("loadingIndicator")
-End Function 
+    
+    GetRecordings()
+End Function
+
+Function GetRecordings()
+    m.contentTask = createObject("roSGNode", "contentTask") 
+    m.contentTask.setField("host", "172.16.254.20:6544") 
+    m.contentTask.observeField("content", "DisplayContent") 
+
+    m.contentTask.control = "RUN"
+End Function
+
+Function DisplayContent()
+    ? "[HomeScene] Displaying Content"
+
+    m.top.gridContent = m.contentTask.Content
+End Function
 
 ' if content set, focus on GridScreen
 Function OnChangeContent()
