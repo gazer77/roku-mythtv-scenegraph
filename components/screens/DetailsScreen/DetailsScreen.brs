@@ -9,7 +9,6 @@ Function Init()
     m.top.observeField("focusedChild", "OnFocusedChildChange")
 
     m.buttons           =   m.top.findNode("Buttons")
-    m.videoPlayer       =   m.top.findNode("VideoPlayer")
     m.poster            =   m.top.findNode("Poster")
     m.description       =   m.top.findNode("Description")
     m.background        =   m.top.findNode("Background")
@@ -17,7 +16,7 @@ Function Init()
 
     ' create buttons
     result = []
-    for each button in ["Play", "Second button"]
+    for each button in ["Play", "Delete"]
         result.push({title : button})
     end for
     m.buttons.content = ContentList2SimpleNode(result)
@@ -30,8 +29,8 @@ Sub onVisibleChange()
         m.buttons.jumpToItem = 0
         m.buttons.setFocus(true)
     else
-        m.videoPlayer.visible = false
-        m.videoPlayer.control = "stop"
+        'm.videoPlayer.visible = false
+        'm.videoPlayer.control = "stop"
         m.poster.uri=""
         m.background.uri=""
     end if
@@ -39,39 +38,8 @@ End Sub
 
 ' set proper focus to Buttons in case if return from Video PLayer
 Sub OnFocusedChildChange()
-    if m.top.isInFocusChain() and not m.buttons.hasFocus() and not m.videoPlayer.hasFocus() then
+    if m.top.isInFocusChain() and not m.buttons.hasFocus() then
         m.buttons.setFocus(true)
-    end if
-End Sub
-
-' set proper focus on buttons and stops video if return from Playback to details
-Sub onVideoVisibleChange()
-    if m.videoPlayer.visible = false and m.top.visible = true
-        m.buttons.setFocus(true)
-        m.videoPlayer.control = "stop"
-    end if
-End Sub
-
-' event handler of Video player msg
-Sub OnVideoPlayerStateChange()
-    if m.videoPlayer.state = "error"
-        ' error handling
-        m.videoPlayer.visible = false
-    else if m.videoPlayer.state = "playing"
-        ' playback handling
-    else if m.videoPlayer.state = "finished"
-        m.videoPlayer.visible = false
-    end if
-End Sub
-
-' on Button press handler
-Sub onItemSelected()
-    ' first button is Play
-    if m.top.itemSelected = 0
-        m.videoPlayer.visible = true
-        m.videoPlayer.setFocus(true)
-        m.videoPlayer.control = "play"
-        m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
     end if
 End Sub
 
@@ -79,12 +47,10 @@ End Sub
 Sub OnContentChange()
     m.description.content   = m.top.content
     m.description.Description.width = "770"
-    m.videoPlayer.content   = m.top.content
-    'm.VideoPlayer.bifDisplay.frameBgImageUri = m.top.content.bifurl
-    m.top.streamUrl         = m.top.content.url
-    m.top.HdBifUrl = m.top.content.HdBifUrl
+    'm.top.streamUrl         = m.top.content.url
+    'm.top.HdBifUrl          = m.top.content.HdBifUrl
     m.poster.uri            = m.top.content.hdBackgroundImageUrl
-    m.background.uri            = m.top.content.hdBackgroundImageUrl
+    m.background.uri        = m.top.content.hdBackgroundImageUrl
 End Sub
 
 '///////////////////////////////////////////'
@@ -99,4 +65,16 @@ Function ContentList2SimpleNode(contentList as Object, nodeType = "ContentNode" 
         end for
     end if
     return result
+End Function
+
+Function onItemSelected(event)
+    ? "Item Selected "; m.buttons.itemSelected
+    
+    if m.buttons.itemSelected = 0
+        ? "Play"
+    else if m.buttons.itemSelected = 1
+        ? "Delete"
+    else
+        ? "Unkown!"
+    end if
 End Function

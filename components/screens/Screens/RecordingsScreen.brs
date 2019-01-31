@@ -3,7 +3,7 @@
  ' creates all children
  ' sets all observers 
 Function Init()
-    ? "[GridScreen] Init"
+    ? "[Recordings] Init"
 
     m.rowList = m.top.findNode("RowList")
     m.description = m.top.findNode("Description")
@@ -11,6 +11,19 @@ Function Init()
 
     m.top.observeField("visible", "onVisibleChange")
     m.top.observeField("focusedChild", "OnFocusedChildChange")
+
+    GetContent()
+End Function
+
+Function GetContent()
+    m.contentTask = createObject("roSGNode", "contentTask")
+    m.contentTask.observeField("content","LoadContent")
+    m.contentTask.host = "172.16.254.20:6544"
+    m.contentTask.Control = "RUN"
+End Function
+
+Function LoadContent()
+    m.rowList.content = m.contentTask.content
 End Function
 
 ' handler of focused item in RowList
@@ -25,7 +38,7 @@ Sub OnItemFocused()
         if focusedContent <> invalid then
             m.top.focusedContent = focusedContent
             m.description.content = focusedContent
-            m.background.uri = focusedContent.hdBackgroundImageUrl
+            'm.background.uri = focusedContent.hdBackgroundImageUrl
         end if
     end if
 End Sub

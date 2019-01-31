@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<component name="MenuGroup" extends="LayoutGroup" >
+    
+    <interface>
+        <field id="selectedMenu" type="string" />
+    </interface>
+    
+    <script type="text/brightscript" uri="pkg:/components/groups/MenuGroup.brs" />
+    
+    <children>
+        <MenuItem id="buttonRecordings" uri="pkg:/images/tv.png" focusedUri="pkg:/images/tv-dark.png" />
+        <MenuItem id="buttonVideo" uri="pkg:/images/film-roll.png" focusedUri="pkg:/images/film-roll-dark.png" />
+        <MenuItem id="buttonMusic" uri="pkg:/images/musical-note.png" focusedUri="pkg:/images/musical-note-dark.png" />
+        <MenuItem id="buttonSchedule" uri="pkg:/images/calendar.png" focusedUri="pkg:/images/calendar-dark.png" />
+        <MenuItem id="buttonSettings" uri="pkg:/images/settings.png" focusedUri="pkg:/images/settings-dark.png" />
+    </children> 
+</component>

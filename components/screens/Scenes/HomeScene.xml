@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<component name="HomeScene" extends="Scene">
+    
+    <interface>
+        <field id="selectedMenu" type="node" alias="buttonMenu.selectedMenu" alwaysNotify="true" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/screens/Scenes/HomeScene.brs" />
+    
+    <children>
+        <Poster
+            translation="[119, 18]"
+            uri="pkg:/images/overhangLogo_small.png"
+            width="90"
+            height="32"  />
+
+        <RecordingsScreen id="recordingsScreen" />
+
+        <rectangle color="0x000000C4" width="90" height="720" translation="[20, 0]" />
+        <MenuGroup id="buttonMenu" horizAlignment="left" itemSpacings="25" translation="[35,100]" />
+
+        <DetailsScreen id="detailsScreen" visible="false" />
+
+        <Video
+            id="videoPlayer"
+            visible="false"
+            translation="[0, 0]"
+            width="1280"
+            height="720" />
+
+    </children>
+</component>

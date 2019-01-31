@@ -11,9 +11,6 @@
         <!-- Button press handler -->
         <field id="itemSelected" type="integer" alwaysnotify="true" alias="Buttons.itemSelected" onChange="onItemSelected" />
 
-        <!-- Playback flag -->
-        <field id="videoPlayerVisible" type="bool" alwaysnotify="true" alias="VideoPlayer.visible"  onChange="onVideoVisibleChange" />
-
         <!-- Content fields -->
         <field id="content" type="node" alwaysnotify="true" onChange="OnContentChange" />
     </interface>
@@ -71,21 +68,12 @@
             height="178"
             />
 
-        <!-- Overhang -->
+        <!-- Overhang 
         <Poster
  	        translation="[79, 36]"
             uri="pkg:/images/overhangLogo.png"
 	        width="156"
-	        height="49"  />
-
-        <!-- Playback node -->
-        <Video
-            id="VideoPlayer"
-            visible="false"
-            translation="[0, 0]"
-            width="1280"
-            height="720"
-            />
+	        height="49"  />-->
 
     </children> 
 </component>

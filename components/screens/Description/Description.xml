@@ -37,12 +37,14 @@
         <Label
             id="Title"
             color="0xFFFFFF"
-            text=""/>
+            text=""
+            font="font:LargeBoldSystemFont" />
 
         <Label
             id="SubTitle"
             color="0xFFFFFF"
-            text=""/>
+            text=""
+            font="font:MediumBoldSystemFont" />
             
         <Label
             id="AirDate"
@@ -59,7 +61,7 @@
             color="0xFFFFFF"
             wrap="true"
             width="1100"
-            height="145"
+            height="300"
             lineSpacing="3"
             text=""/>
     </children>
