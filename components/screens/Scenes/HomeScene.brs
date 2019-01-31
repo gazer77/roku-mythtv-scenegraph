@@ -17,6 +17,8 @@ Function Init()
     m.buttonMenu.setFocus(true)
 
     m.menuItemFocused = false
+
+    m.dialog = m.top.findNode("dialog")
 End Function
 
 ' Row item selected handler
@@ -32,7 +34,7 @@ End Function
 
 ' Main Remote keypress event loop
 Function OnKeyEvent(key, press) as Boolean
-    '? ">>> HomeScene >> OnkeyEvent " ; key ; " " ; press
+    ? ">>> HomeScene >> OnkeyEvent " ; key ; " " ; press
     result = false
     if press then
         if key = "right"
@@ -40,8 +42,12 @@ Function OnKeyEvent(key, press) as Boolean
             HandleMenuItem(m.top.selectedMenu)
         end if
         if key = "options"
-            ' option key handler
-        else if key = "back"
+            if m.currentScreen <> invalid and m.currentScreen.focusedContent <> invalid
+                HandleOptions()
+                result = true
+            end if
+        end if
+        if key = "back"
             ? "Back"
             ' if Details opened
             if m.currentScreen.visible = false and m.videoPlayer.visible = false
@@ -125,11 +131,17 @@ Function HandleSettings()
     ? "Settings"
 End Function
 
-Sub onVideoVisibleChange()
+Function HandleOptions()
+    m.dialog.message = "Delete " + m.currentScreen.focusedContent.title + "?"
+    m.dialog.visible = true
+    m.dialog.setFocus(true)
+End Function
+
+Function onVideoVisibleChange()
     if m.videoPlayer.visible = false and m.top.visible = true
         StopVideo()
     end if
-End Sub
+End Function
 
 Function StopVideo()
     m.currentScreen.setFocus(true)
@@ -137,7 +149,7 @@ Function StopVideo()
 end Function
 
 ' event handler of Video player msg
-Sub OnVideoPlayerStateChange()
+Function OnVideoPlayerStateChange()
     ? "Player State: " ; m.videoPlayer.state
     if m.videoPlayer.state = "error"
         ' error handling
@@ -147,10 +159,10 @@ Sub OnVideoPlayerStateChange()
     else if m.videoPlayer.state = "finished"
         m.videoPlayer.visible = false
     end if
-End Sub
+End Function
 
 ' on Button press handler
-Sub PlaySelected()
+Function PlaySelected()
     ' first button is Play
     ? "Playing "; m.currentScreen.focusedContent.title
     m.videoPlayer.content = m.currentScreen.focusedContent
@@ -158,4 +170,17 @@ Sub PlaySelected()
     m.videoPlayer.setFocus(true)
     m.videoPlayer.control = "play"
     m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
-End Sub
+End Function
+
+Function OnDialogButtonSelected()
+    ? "Button Selected " ; m.dialog.buttonSelected
+    if m.dialog.buttonSelected = 0
+        Delete()
+    end if
+
+    m.dialog.visible = false
+    m.currentScreen.setFocus(true)
+End Function
+
+Function Delete()
+End Function
