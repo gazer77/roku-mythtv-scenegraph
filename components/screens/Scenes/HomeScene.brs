@@ -132,21 +132,11 @@ Function HandleSettings()
 End Function
 
 Function HandleOptions()
-    m.dialog.message = "Delete " + m.currentScreen.focusedContent.title + "?"
+    m.dialog.title = "Delete " + m.currentScreen.focusedContent.title + "?"
+    m.dialog.message = m.currentScreen.focusedContent.subTitle
     m.dialog.visible = true
     m.dialog.setFocus(true)
 End Function
-
-Function onVideoVisibleChange()
-    if m.videoPlayer.visible = false and m.top.visible = true
-        StopVideo()
-    end if
-End Function
-
-Function StopVideo()
-    m.currentScreen.setFocus(true)
-    m.videoPlayer.control = "stop"
-end Function
 
 ' event handler of Video player msg
 Function OnVideoPlayerStateChange()
@@ -160,6 +150,17 @@ Function OnVideoPlayerStateChange()
         m.videoPlayer.visible = false
     end if
 End Function
+
+Function onVideoVisibleChange()
+    if m.videoPlayer.visible = false and m.top.visible = true
+        StopVideo()
+    end if
+End Function
+
+Function StopVideo()
+    m.currentScreen.setFocus(true)
+    m.videoPlayer.control = "stop"
+end Function
 
 ' on Button press handler
 Function PlaySelected()
