@@ -3,7 +3,7 @@
 <component name="JsonContentTask" extends="Task" >
  
 <interface>
-  <field id="host" type="string" />
+  <field id="apiUrl" type="string" />
   <field id="content" type="node" />
 </interface>
  
