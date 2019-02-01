@@ -16,7 +16,7 @@ Function Init()
 End Function
 
 Function GetContent()
-    m.contentTask = createObject("roSGNode", "contentTask")
+    m.contentTask = createObject("roSGNode", "recordingsContentTask")
     m.contentTask.observeField("content","LoadContent")
     m.contentTask.host = "172.16.254.20:6544"
     m.contentTask.Control = "RUN"
