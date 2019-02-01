@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <component name="JsonContentTask" extends="Task" >
+	<interface>
+		<field id="apiUrl" type="string" />
+		<field id="json" type="assocarray" />
+	</interface>
  
-<interface>
-  <field id="apiUrl" type="string" />
-  <field id="content" type="node" />
-</interface>
- 
-<script type="text/brightscript" uri = "pkg:/components/tasks/jsonContentTask.brs" />
-	<children>
-		<node id="content" />
-	</children>
+	<script type="text/brightscript" uri = "pkg:/components/tasks/jsonContentTask.brs" />
 </component>

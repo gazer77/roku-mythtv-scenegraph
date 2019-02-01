@@ -3,8 +3,8 @@ Function Init()
 End Function
 
 Function getContent()
-    jsonContent = GetApiData(m.top.apiUrl)
-    m.top.content = jsonContent
+    json = GetApiData(m.top.apiUrl)
+    m.top.json = json
 End Function
 
 Function GetApiData(apiUrl)

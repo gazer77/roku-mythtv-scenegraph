@@ -1,17 +1,22 @@
 Function Init()
+    m.jsonContentTask = createObject("roSGNode", "jsonContentTask")
 	m.top.functionName = "getContent"
 End Function
 
 Function getContent()
-	host = m.top.host
+    m.jsonContentTask.observeField("json","LoadJsonContent")
+    m.jsonContentTask.apiUrl = "http://" + m.top.host + "/Dvr/GetRecordedList"
+    m.jsonContentTask.Control = "RUN"
+End Function
 
-	rows = GetApiRecordings(host)
-    
-	m.top.content = ObjectToContentNode(rows)
+Function LoadJsonContent()
+    json = m.jsonContentTask.json
+    transformedContent = TransFormJson(json)
+	m.top.content = ObjectToContentNode(transformedContent)
 End Function
 
 Function ObjectToContentNode(rows As Object)
-    print("[Content Task] Building Content")
+    ? "[Content Task] Building Content"
     RowItems = createObject("RoSGNode","ContentNode")
 
     for each rowAA in rows
@@ -49,15 +54,13 @@ Function ObjectToContentNode(rows As Object)
 End Function
 
 
-Function GetApiRecordings(host)
-    jsonObject = GetApiData("http://" + host + "/Dvr/GetRecordedList")
-
+Function TransFormJson(jsonContent)
 	? "[Content Task] Parsing"
     result = []
 
     programs = createObject("roArray", 0, true)
     
-    for each program in jsonObject.ProgramList.Programs
+    for each program in jsonContent.ProgramList.Programs
         programs.push(program)
     end for
 
@@ -67,7 +70,7 @@ Function GetApiRecordings(host)
     lastTitle = ""
     index = 0
     for each program in programs
-        stream = "http://" + host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
+        stream = "http://" + m.top.host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
 
         item = {
             title: program.title,
@@ -80,9 +83,9 @@ Function GetApiRecordings(host)
             url: stream,
             streamFormat: "mp4",
             description: program.Description,
-            HDPosterUrl: "http://" + host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId,
-            HdBifUrl: "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_hd.bif",
-            SdBifUrl: "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_sd.bif" '1621_20180410020000_hd.bif
+            HDPosterUrl: "http://" + m.top.host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId,
+            HdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_hd.bif",
+            SdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_sd.bif" '1621_20180410020000_hd.bif
         }
 
         'item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
@@ -102,15 +105,4 @@ Function GetApiRecordings(host)
     ? "[Content Task] Parsed"
 
     return result
-End Function
-
-Function GetApiData(apiPath)
-	? "[Content Task] Retrieving Data"
-    urlTransfer = CreateObject("roUrlTransfer")
-    urlTransfer.SetUrl(apiPath)
-    urlTransfer.AddHeader("accept", "application/json")
-    response = urlTransfer.GetToString()
-	? "[Content Task] Data Retrieved"
-
-    return ParseJSON(response)
 End Function
