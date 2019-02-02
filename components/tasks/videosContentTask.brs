@@ -52,48 +52,48 @@ Function TransFormJson(jsonContent)
 	? "[Content Task] Parsing"
     result = []
 
-    programs = createObject("roArray", 0, true)
+    videos = createObject("roArray", 0, true)
     
-    for each program in jsonContent.ProgramList.Programs
-        programs.push(program)
+    for each video in jsonContent.VideoMetadataInfos
+        videos.push(video)
     end for
 
-    programs.SortBy("Title")
+    videos.SortBy("Title")
 
     row = { title: "", videos: []}
     lastTitle = ""
     index = 0
-    for each program in programs
-        stream = "http://" + m.top.host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
+    for each video in videos
+        stream = "http://" + m.top.host + "/Content/GetVideo?Id=" + video.Id
 
         item = {
-            title: program.title,
-            subTitle: program.SubTitle,
-            airDate: program.Airdate,
-            recordedDate: program.Recording.StartTs,
+            title: video.title,
+            subTitle: video.SubTitle,
+            releaseDate: video.ReleaseDate,
+            length: video.Length,
             stream: {
                 url : stream
             },
             url: stream,
             streamFormat: "mp4",
-            description: program.Description,
-            HDPosterUrl: "http://" + m.top.host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId,
-            HdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_hd.bif",
-            SdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_sd.bif" '1621_20180410020000_hd.bif
+            description: video.Description,
+            HDPosterUrl: "http://" + m.top.host + "/Content/GetVideoArtwork?Id=" + video.Id ',
+            'HdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(video.FileName, Len(video.FileName) - 4) + "_hd.bif",
+            'SdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(video.FileName, Len(video.FileName) - 4) + "_sd.bif"
         }
 
         'item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
                 
-        if program.Title <> lastTitle And lastTitle <> "" then
-            row.videos.SortBy("recordedDate", "r")
+        if video.Title <> lastTitle And lastTitle <> "" then
+            'row.videos.SortBy("recordedDate", "r")
             result.push(row)
-            row = { title: program.Title, videos: []}
+            row = { title: video.Title, videos: []}
         end if
         row.videos.push(item)
 
-        lastTitle = program.Title
+        lastTitle = video.Title
     end for
-    row.videos.SortBy("recordedDate", "r")
+    'row.videos.SortBy("recordedDate", "r")
     result.push(row)
 
     ? "[Content Task] Parsed"
