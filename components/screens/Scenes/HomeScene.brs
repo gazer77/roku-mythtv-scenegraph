@@ -10,26 +10,19 @@ Function Init()
     'm.loadingIndicator = m.top.findNode("loadingIndicator")
     m.videoPlayer = m.top.findNode("videoPlayer")
 
-    m.detailsScreen = m.top.findNode("detailsScreen")
-
     m.buttonMenu = m.top.findNode("buttonMenu")
 
     m.buttonMenu.setFocus(true)
 
     m.menuItemFocused = false
 
-    m.dialog = m.top.findNode("dialog")
+    m.contentOptionsDialog = m.top.findNode("contentOptionsDialog")
+    m.deleteDialog = m.top.findNode("deleteDialog")
 End Function
 
 ' Row item selected handler
 Function OnItemSelected()
-    ' On select any item on home scene, show Details node and hide Grid
-    ? "Selected "; m.currentScreen.focusedContent.title
-
-    m.currentScreen.visible = false
-    m.detailsScreen.content = m.currentScreen.focusedContent
-    m.detailsScreen.setFocus(true)
-    m.detailsScreen.visible = true
+    HandleOptions()
 End Function
 
 ' Main Remote keypress event loop
@@ -42,23 +35,10 @@ Function OnKeyEvent(key, press) as Boolean
             HandleMenuItem(m.top.selectedMenu)
         end if
         if key = "options"
-            if m.currentScreen <> invalid and m.currentScreen.focusedContent <> invalid
-                HandleOptions()
-                result = true
-            end if
+
         end if
         if key = "back"
-            ? "Back"
-            ' if Details opened
-            if m.currentScreen.visible = false and m.videoPlayer.visible = false
-                ? "Back From Details"
-                m.currentScreen.visible = true
-                m.detailsScreen.visible = false
-                m.currentScreen.setFocus(true)
-                result = true
-
-            ' if video player opened
-            else if m.currentScreen.visible = false and m.videoPlayer.visible = true
+            if m.currentScreen.visible = false and m.videoPlayer.visible = true
                 ? "Back From Player"
                 m.videoPlayer.visible = false
                 result = true
@@ -132,10 +112,16 @@ Function HandleSettings()
 End Function
 
 Function HandleOptions()
-    m.dialog.title = "Delete " + m.currentScreen.focusedContent.title + "?"
-    m.dialog.message = m.currentScreen.focusedContent.subTitle
-    m.dialog.visible = true
-    m.dialog.setFocus(true)
+    m.contentOptionsDialog.message = m.currentScreen.focusedContent.title + ": " + m.currentScreen.focusedContent.subTitle
+    m.contentOptionsDialog.visible = true
+    m.contentOptionsDialog.setFocus(true)
+End Function
+
+Function HandleDelete()
+    m.deleteDialog.title = "Delete " + m.currentScreen.focusedContent.title + "?"
+    m.deleteDialog.message = m.currentScreen.focusedContent.subTitle
+    m.deleteDialog.visible = true
+    m.deleteDialog.setFocus(true)
 End Function
 
 ' event handler of Video player msg
@@ -173,13 +159,25 @@ Function PlaySelected()
     m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
 End Function
 
-Function OnDialogButtonSelected()
-    ? "Button Selected " ; m.dialog.buttonSelected
-    if m.dialog.buttonSelected = 0
+Function OnContentOptionsDialogButtonSelected()
+    ? "Button Selected " ; m.contentOptionsDialog.buttonSelected
+
+    m.contentOptionsDialog.visible = false
+    if m.contentOptionsDialog.buttonSelected = 0
+        PlaySelected()
+    end if   
+    if m.contentOptionsDialog.buttonSelected = 1
+        HandleDelete()
+    end if
+End Function
+
+Function OnDeleteDialogButtonSelected()
+    ? "Button Selected " ; m.deleteDialog.buttonSelected
+    if m.deleteDialog.buttonSelected = 0
         Delete()
     end if
 
-    m.dialog.visible = false
+    m.deleteDialog.visible = false
     m.currentScreen.setFocus(true)
 End Function
 
