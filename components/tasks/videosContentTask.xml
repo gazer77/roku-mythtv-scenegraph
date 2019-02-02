@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="recordingsContentTask" extends="Task" >
+	<interface>
+		<field id="host" type="string" />
+		<field id="content" type="node" />
+	</interface>
+ 
+  <script type="text/brightscript" uri = "pkg:/components/tasks/contentTaskBase.brs" />
+	<script type="text/brightscript" uri = "pkg:/components/tasks/recordingsContentTask.brs" />
+	<children>
+		<node id="content" />
+	</children>
+</component>
