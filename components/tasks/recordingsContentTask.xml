@@ -6,6 +6,7 @@
 		<field id="content" type="node" />
 	</interface>
  
+  <script type="text/brightscript" uri = "pkg:/components/tasks/contentTaskBase.brs" />
 	<script type="text/brightscript" uri = "pkg:/components/tasks/recordingsContentTask.brs" />
 	<children>
 		<node id="content" />

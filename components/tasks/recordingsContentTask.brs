@@ -1,18 +1,12 @@
 Function Init()
-    m.jsonContentTask = createObject("roSGNode", "jsonContentTask")
 	m.top.functionName = "getContent"
 End Function
 
 Function getContent()
-    m.jsonContentTask.observeField("json","LoadJsonContent")
-    m.jsonContentTask.apiUrl = "http://" + m.top.host + "/Dvr/GetRecordedList"
-    m.jsonContentTask.Control = "RUN"
-End Function
-
-Function LoadJsonContent()
-    json = m.jsonContentTask.json
+    apiUrl = "http://" + m.top.host + "/Dvr/GetRecordedList"
+    json = GetApiData(apiUrl)
     transformedContent = TransFormJson(json)
-	m.top.content = ObjectToContentNode(transformedContent)
+	m.top.content = ObjectToContentNode(transformedContent)    
 End Function
 
 Function ObjectToContentNode(rows As Object)
