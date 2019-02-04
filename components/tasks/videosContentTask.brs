@@ -24,8 +24,8 @@ Function ObjectToContentNode(rows As Object)
             'create fields that ContentNode doesn't have
             item.addFields({
                 SubTitle: "",
-                RecordedDate: "",
-                AirDate: ""
+                ReleasedDate: "",
+                Folder: ""
             })
             
             ' We don't use item.setFields(video) as doesn't cast streamFormat to proper value
@@ -54,14 +54,20 @@ Function TransFormJson(jsonContent)
 
     videos = createObject("roArray", 0, true)
     
-    for each video in jsonContent.VideoMetadataInfos
+    for each video in jsonContent.VideoMetadataInfoList.VideoMetadataInfos
+        parts = Split("/", video.FileName)
+        if parts.Count() > 1 then
+            video.Folder = parts[0]
+        else
+            video.Folder = "Other"
+        end if
         videos.push(video)
     end for
 
-    videos.SortBy("Title")
+    videos.SortBy("Folder")
 
     row = { title: "", videos: []}
-    lastTitle = ""
+    lastFolder = ""
     index = 0
     for each video in videos
         stream = "http://" + m.top.host + "/Content/GetVideo?Id=" + video.Id
@@ -84,19 +90,23 @@ Function TransFormJson(jsonContent)
 
         'item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
                 
-        if video.Title <> lastTitle And lastTitle <> "" then
-            'row.videos.SortBy("recordedDate", "r")
+        if video.Folder <> lastFolder And lastFolder <> "" then
+            row.videos.SortBy("Title")
             result.push(row)
             row = { title: video.Title, videos: []}
         end if
         row.videos.push(item)
 
-        lastTitle = video.Title
+        lastFolder = video.Folder
     end for
-    'row.videos.SortBy("recordedDate", "r")
+    row.videos.SortBy("Title")
     result.push(row)
 
     ? "[Content Task] Parsed"
 
     return result
+End Function
+
+Function ProcessFolderName(folderName as string)
+    return ProperCase(Replace(folderName, "_", " "))
 End Function

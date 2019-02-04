@@ -18,6 +18,39 @@ Function Init()
 
     m.contentOptionsDialog = m.top.findNode("contentOptionsDialog")
     m.deleteDialog = m.top.findNode("deleteDialog")
+
+    m.currentScreen = m.top.findNode("recordingsScreen")
+
+    m.top.observeField("selectedMenu", "OnSelectedMenuChanged")
+End Function
+
+Function OnSelectedMenuChanged()
+    menuName = m.top.selectedMenu
+
+    m.currentScreen.visible = false
+    if menuName = "buttonRecordings"
+        if m.recordingsScreen = invalid
+            m.recordingsScreen = m.top.findNode("recordingsScreen")
+            m.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
+        end if
+        
+        m.recordingsScreen.visible = true
+        m.currentScreen = m.recordingsScreen
+    else if menuName = "buttonVideo"
+        if m.videosScreen = invalid
+            m.videosScreen = m.top.findNode("videosScreen")
+            m.videosScreen.observeField("rowItemSelected", "OnItemSelected")
+        end if
+
+        m.videosScreen.visible = true
+        m.currentScreen = m.videosScreen
+    else if menuName = "buttonMusic"
+        
+    else if menuName = "buttonSchedule"
+        
+    else if menuName = "buttonSettings"
+        
+    end if
 End Function
 
 ' Row item selected handler
@@ -83,20 +116,15 @@ Function HandleMenuItem(menuName)
 end Function
 
 Function HandleRecording()
-    if m.recordingsScreen = invalid
-        m.recordingsScreen = m.top.findNode("recordingsScreen")
-        m.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
-    end if
-
-    m.currentScreen = m.recordingsScreen
-
     m.recordingsScreen.setFocus(true)
 
     m.menuItemFocused = true
 End Function
 
 Function HandleVideo()
-    ? "Video"
+    m.videosScreen.setFocus(true)
+
+    m.menuItemFocused = true
 End Function
 
 Function HandleMusic()
@@ -134,6 +162,9 @@ Function OnVideoPlayerStateChange()
         ' playback handling
     else if m.videoPlayer.state = "finished"
         m.videoPlayer.visible = false
+    else if m.videoPlayer.state = "stop"
+        m.videoPlayer.visible = false
+        HandleVideoStop()
     end if
 End Function
 
@@ -179,6 +210,9 @@ Function OnDeleteDialogButtonSelected()
 
     m.deleteDialog.visible = false
     m.currentScreen.setFocus(true)
+End Function
+
+Function HandleVideoStop()
 End Function
 
 Function Delete()

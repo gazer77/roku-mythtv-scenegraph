@@ -17,9 +17,8 @@
             height="32"  />
 
         <RecordingsScreen id="recordingsScreen" />
-        <!--
         <VideosScreen id="videosScreen" visible="false" />
-        -->
+
         <rectangle color="0x000000C4" width="90" height="720" translation="[20, 0]" />
         <MenuGroup id="buttonMenu" horizAlignment="left" itemSpacings="25" translation="[35,100]" />
 
