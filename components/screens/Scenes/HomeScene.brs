@@ -1,27 +1,59 @@
-' ********** Copyright 2016 Roku Corp.  All Rights Reserved. ********** 
- ' inits grid screen
- ' creates all children
- ' sets all observers 
 Function Init()
     ' listen on port 8089
     ? "[HomeScene] Init"
     
     ' loading indicator starts at initializatio of channel
     'm.loadingIndicator = m.top.findNode("loadingIndicator")
+    InitializeVideoPlayer()
+    InitializeMenu()
+    InitializeDialogs()
+    InitializeScreens()  
+End Function
+
+Function InitializeVideoPlayer()
     m.videoPlayer = m.top.findNode("videoPlayer")
+    m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
+End Function
 
+Function InitializeMenu()
     m.buttonMenu = m.top.findNode("buttonMenu")
-
     m.buttonMenu.setFocus(true)
-
     m.menuItemFocused = false
+    m.top.observeField("selectedMenu", "OnSelectedMenuChanged")
+End Function
 
+Function InitializeDialogs()
     m.contentOptionsDialog = m.top.findNode("contentOptionsDialog")
     m.deleteDialog = m.top.findNode("deleteDialog")
+End Function
+
+Function InitializeScreens()
+    InitializeRecordingsScreen()
+    InitializeVideosScreen()
+    InitializeMusicScreen()
+    InitializeSchedulesScreen()
+    InitializeSettingsScreen()
 
     m.currentScreen = m.top.findNode("recordingsScreen")
+End Function
 
-    m.top.observeField("selectedMenu", "OnSelectedMenuChanged")
+Function InitializeRecordingsScreen()
+    m.recordingsScreen = m.top.findNode("recordingsScreen")
+    m.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
+End Function
+
+Function InitializeVideosScreen()
+    m.videosScreen = m.top.findNode("videosScreen")
+    m.videosScreen.observeField("rowItemSelected", "OnItemSelected")
+End Function
+
+Function InitializeMusicScreen()
+End Function
+
+Function InitializeSchedulesScreen()
+End Function
+
+Function InitializeSettingsScreen()
 End Function
 
 Function OnSelectedMenuChanged()
@@ -29,19 +61,9 @@ Function OnSelectedMenuChanged()
 
     m.currentScreen.visible = false
     if menuName = "buttonRecordings"
-        if m.recordingsScreen = invalid
-            m.recordingsScreen = m.top.findNode("recordingsScreen")
-            m.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
-        end if
-        
         m.recordingsScreen.visible = true
         m.currentScreen = m.recordingsScreen
     else if menuName = "buttonVideo"
-        if m.videosScreen = invalid
-            m.videosScreen = m.top.findNode("videosScreen")
-            m.videosScreen.observeField("rowItemSelected", "OnItemSelected")
-        end if
-
         m.videosScreen.visible = true
         m.currentScreen = m.videosScreen
     else if menuName = "buttonMusic"
@@ -187,7 +209,6 @@ Function PlaySelected()
     m.videoPlayer.visible = true
     m.videoPlayer.setFocus(true)
     m.videoPlayer.control = "play"
-    m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
 End Function
 
 Function OnContentOptionsDialogButtonSelected()
