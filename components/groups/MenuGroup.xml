@@ -9,10 +9,10 @@
     <script type="text/brightscript" uri="pkg:/components/groups/MenuGroup.brs" />
     
     <children>
-        <MenuItem id="buttonRecordings" uri="pkg:/images/tv.png" focusedUri="pkg:/images/tv-dark.png" />
-        <MenuItem id="buttonVideo" uri="pkg:/images/film-roll.png" focusedUri="pkg:/images/film-roll-dark.png" />
-        <MenuItem id="buttonMusic" uri="pkg:/images/musical-note.png" focusedUri="pkg:/images/musical-note-dark.png" />
-        <MenuItem id="buttonSchedule" uri="pkg:/images/calendar.png" focusedUri="pkg:/images/calendar-dark.png" />
-        <MenuItem id="buttonSettings" uri="pkg:/images/settings.png" focusedUri="pkg:/images/settings-dark.png" />
+        <MenuItem id="buttonRecordings" uri="pkg:/images/tv-dark.png" focusedUri="pkg:/images/tv.png" />
+        <MenuItem id="buttonVideo" uri="pkg:/images/film-roll-dark.png" focusedUri="pkg:/images/film-roll.png" />
+        <MenuItem id="buttonMusic" uri="pkg:/images/musical-note-dark.png" focusedUri="pkg:/images/musical-note.png" />
+        <MenuItem id="buttonSchedule" uri="pkg:/images/calendar-dark.png" focusedUri="pkg:/images/calendar.png" />
+        <MenuItem id="buttonSettings" uri="pkg:/images/settings-dark.png" focusedUri="pkg:/images/settings.png" />
     </children> 
 </component>
