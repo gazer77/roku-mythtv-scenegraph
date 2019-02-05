@@ -48,9 +48,11 @@ Function ObjectToContentNode(rows As Object)
 End Function
 
 
-Function TransFormJson(jsonContent)
+Function TransFormJson(json as String)
 	? "[Content Task] Parsing"
     result = []
+
+    jsonContent = ParseJSON(json)
 
     programs = createObject("roArray", 0, true)
     
