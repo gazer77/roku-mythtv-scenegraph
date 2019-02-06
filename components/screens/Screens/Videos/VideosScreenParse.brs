@@ -6,7 +6,6 @@ Function ObjectToContentNode(rows As Object)
         row = createObject("RoSGNode","ContentNode")
         row.Title = rowAA.title
 
-        index = 0
         for each video in rowAA.videos
             item = createObject("RoSGNode","ContentNode")
 
@@ -22,11 +21,6 @@ Function ObjectToContentNode(rows As Object)
                 item[key] = video[key]
             end for
             row.appendChild(item)
-
-            index = index + 1
-            if index > 5 then
-                exit for
-            end if
         end for
         RowItems.appendChild(row)
     end for
@@ -36,57 +30,52 @@ Function ObjectToContentNode(rows As Object)
     return RowItems
 End Function
 
-
 Function TransFormJson(json as String, host as String)
 	? "[Content Task] Parsing"
     result = []
 
     jsonContent = ParseJSON(json)
 
-    videos = createObject("roArray", 0, true)
+    videos = [] 'createObject("roArray", 0, true)
     
     for each video in jsonContent.VideoMetadataInfoList.VideoMetadataInfos
         parts = Split("/", video.FileName)
+        folder = "Other"
         if parts.Count() > 1 then
-            video.Folder = parts[0]
-        else
-            video.Folder = "Other"
+            folder = ProcessFolderName(parts[0])
         end if
-        videos.push(video)
-    end for
 
-    videos.SortBy("Folder")
-
-    row = { title: "", videos: []}
-    lastFolder = ""
-    index = 0
-    for each video in videos
         stream = "http://" + host + "/Content/GetVideo?Id=" + video.Id
-
-        item = {
+        v = {
+            Id: video.Id,
+            Folder: folder,
             title: video.title,
             subTitle: video.SubTitle,
             releaseDate: video.ReleaseDate,
-            length: video.Length,
             stream: {
                 url : stream
             },
             url: stream,
+            length: video.Length,
             streamFormat: "mp4",
             description: video.Description,
-            HDPosterUrl: "http://" + host + "/Content/GetVideoArtwork?Id=" + video.Id ',
-            'HdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(video.FileName, Len(video.FileName) - 4) + "_hd.bif",
-            'SdBifUrl: "http://" + m.top.host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(video.FileName, Len(video.FileName) - 4) + "_sd.bif"
+            HDPosterUrl: "http://" + host + "/Content/GetVideoArtwork?Id=" + video.Id
         }
+        videos.push(v)
+    end for
+    
+    videos.SortBy("Folder")
 
-        'item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
-                
+    row = { title: videos[0].Folder, videos: []}
+    lastFolder = ""
+
+    for each video in videos              
         if video.Folder <> lastFolder And lastFolder <> "" then
             row.videos.SortBy("Title")
             result.push(row)
-            row = { title: video.Title, videos: []}
+            row = { title: video.Folder, videos: []}
         end if
-        row.videos.push(item)
+        row.videos.push(video)
 
         lastFolder = video.Folder
     end for

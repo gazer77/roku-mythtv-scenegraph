@@ -6,7 +6,6 @@ Function ObjectToContentNode(rows As Object)
         row = createObject("RoSGNode","ContentNode")
         row.Title = rowAA.title
 
-        index = 0
         for each video in rowAA.videos
             item = createObject("RoSGNode","ContentNode")
 
@@ -22,11 +21,6 @@ Function ObjectToContentNode(rows As Object)
                 item[key] = video[key]
             end for
             row.appendChild(item)
-
-            index = index + 1
-            if index > 5 then
-                exit for
-            end if
         end for
         RowItems.appendChild(row)
     end for
@@ -51,9 +45,9 @@ Function TransFormJson(json as String, host as String)
 
     programs.SortBy("Title")
 
-    row = { title: "", videos: []}
+    row = { title: programs[0].Title, videos: []}
     lastTitle = ""
-    index = 0
+
     for each program in programs
         stream = "http://" + host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
 

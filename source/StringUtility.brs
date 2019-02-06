@@ -22,7 +22,17 @@ Function Split(character as String, value as String)
 End Function
 
 Function ProperCase(value as String) As String
-    return value
+    properCased = ""
+
+    For i = 1 To Len(value) Step 1
+        if i = 1 Or (i > 1 and Mid(value, i - 1, 1) = " ") then
+            properCased = properCased + Ucase(Mid(value, i, 1))
+        else
+            properCased = properCased + Lcase(Mid(value, i, 1))
+        end if
+    End For
+
+    return properCased
 End Function
 
 'Replace function by Roku as part of a utility of theirs from one of the examples
