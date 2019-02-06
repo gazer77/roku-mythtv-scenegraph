@@ -58,3 +58,40 @@ Function Replace(basestr As String, oldsub As String, newsub As String) As Strin
 
     return newstr
 End Function
+
+Function FormatDate(value)
+    date = CreateObject("roDateTime")
+    date.FromISO8601String(value)
+    date.ToLocalTime()
+
+    year = date.GetYear()
+    month = date.GetMonth()
+    day = date.GetDayOfMonth()
+
+    return FormateIntger(year) + "-" + FormateIntger(month) + "-" + FormateIntger(day)
+End Function
+
+Function FormatDateTime(value)
+    date = CreateObject("roDateTime")
+    date.FromISO8601String(value)
+    date.ToLocalTime()
+
+    hour = date.GetHours()
+    minutes = date.GetMinutes()
+
+    hourString = FormateIntger(hour)
+
+    minuteString = FormateIntger(minutes)
+
+    return FormatDate(value) + " " + hourString + ":" + minuteString
+End Function
+
+Function FormateIntger(value)
+    stringValue = StrI(value)
+    stringValue = Right(stringValue, Len(stringValue) - 1)
+    if value < 10 then
+        stringValue = "0" + stringValue
+    end if
+
+    return stringValue
+End Function

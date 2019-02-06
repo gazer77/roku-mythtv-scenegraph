@@ -4,8 +4,7 @@ Sub Init()
     m.top.Title = m.top.findNode("Title")
     m.top.SubTitle = m.top.findNode("SubTitle")
     m.top.Description = m.top.findNode("Description")
-    m.top.RecordedDate = m.top.findNode("RecordedDate")
-    m.top.AirDate = m.top.findNode("AirDate")
+    m.top.releaseDate = m.top.findNode("ReleaseDate")
 End Sub
 
 ' Content change handler
@@ -32,22 +31,13 @@ Sub OnContentChanged()
         end if
     end if
     
-    recordedDate = item.recordeddate
-    if recordedDate <> invalid then
-        if recordedDate <> ""
+    releaseDate = item.releaseDate
+    if releaseDate <> invalid then
+        if releaseDate <> ""
 
-            m.top.RecordedDate.text = FormatDateTime(recordedDate.toStr())
+            m.top.releaseDate.text = FormatDate(releaseDate.toStr())
         else
-            m.top.RecordedDate.text = "No release date"
-        end if
-    end if
-
-    airDate = item.airdate
-    if airDate <> invalid then
-        if airDate <> ""
-            m.top.AirDate.text = airDate.toStr()
-        else
-            m.top.AirDate.text = "No air date"
+            m.top.releaseDate.text = "No release date"
         end if
     end if
 End Sub

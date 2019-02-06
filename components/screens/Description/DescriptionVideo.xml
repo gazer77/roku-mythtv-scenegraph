@@ -4,7 +4,7 @@
 <!-- 
     node - description of the content item
     -->
-<component name="Description" extends="LayoutGroup">
+<component name="DescriptionVideo" extends="LayoutGroup">
     <interface>
         <!-- Alias to Title label -->
         <field id="Title" type="node" alias=""/>
@@ -21,9 +21,7 @@
         <field id="UserStarRating" type="node" alias=""/>
 
         <!-- Alias to ReleaseDate label -->
-        <field id="RecordedDate" type="node" alias=""/>
-
-        <field id="AirDate" type="node" alias=""/>
+        <field id="ReleaseDate" type="node" alias=""/>
 
         <!-- Content node -->
         <field id="Content" type="node" onChange="OnContentChanged"/>
@@ -31,7 +29,7 @@
     
     <!-- main handler -->
     <script type="text/brightscript" uri="pkg:/source/StringUtility.brs" />
-    <script type="text/brightscript" uri="pkg:/components/screens/Description/Description.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Description/DescriptionVideo.brs" />
     
     <children>
         
@@ -48,12 +46,7 @@
             font="font:MediumBoldSystemFont" />
             
         <Label
-            id="AirDate"
-            color="0xFFFFFF"
-            text=""/>
-
-        <Label
-            id="RecordedDate"
+            id="ReleaseDate"
             color="0xFFFFFF"
             text=""/>
         

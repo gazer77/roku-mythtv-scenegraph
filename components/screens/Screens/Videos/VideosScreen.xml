@@ -38,14 +38,14 @@
 			translation="[-25, 372]"
 			itemSize="[1327, 218]"
 			numRows="2"
-			itemSpacing="[13, 0]"
+			itemSpacing="[13, 55]"
 			focusXOffset="[147]"
 			rowFocusAnimationStyle="fixedFocusWrap"
-			rowItemSize="[[262, 147]]"
+			rowItemSize="[[147, 218]]"
 			rowItemSpacing="[[16.5, 3]]"
 			showRowLabel="true"
 			showRowCounter="true"
-			rowLabelOffset="[[147, 20]]"
+			rowLabelOffset="[[147, 15]]"
             />
             
         <Poster
@@ -54,7 +54,7 @@
             width="2000"
             height="95" />
 
-        <Description
+        <DescriptionVideo
             id="Description"
 			translation="[116, 60]"
             itemSpacings="[7,17]"/>
