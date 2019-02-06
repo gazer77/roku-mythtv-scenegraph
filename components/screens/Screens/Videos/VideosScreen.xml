@@ -22,8 +22,8 @@
     
     <!-- main handler -->
     <script type="text/brightscript" uri = "pkg:/source/StringUtility.brs" />
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/VideosScreen.brs" />
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/VideosScreenParse.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Videos/VideosScreen.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Videos/VideosScreenParse.brs" />
     <children>
         <!-- <FadingBackground
             id="Background"

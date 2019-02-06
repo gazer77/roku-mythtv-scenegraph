@@ -21,7 +21,7 @@
     </interface>
     
     <!-- main handler -->
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/RecordingsScreen.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreen.brs" />
     
     <children>
         <!-- <FadingBackground
