@@ -22,7 +22,10 @@ Function GetContent()
 End Function
 
 Function LoadContent()
-    m.rowList.content = m.contentTask.content
+    json = m.contentTask.content
+
+    transformedContent = TransFormJson(json, "172.16.254.20:6544")
+    m.rowList.content = ObjectToContentNode(transformedContent)
 End Function
 
 ' handler of focused item in RowList

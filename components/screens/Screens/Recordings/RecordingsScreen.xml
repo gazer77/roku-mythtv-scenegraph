@@ -22,7 +22,7 @@
     
     <!-- main handler -->
     <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreen.brs" />
-    
+    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreenParse.brs" />
     <children>
         <!-- <FadingBackground
             id="Background"
