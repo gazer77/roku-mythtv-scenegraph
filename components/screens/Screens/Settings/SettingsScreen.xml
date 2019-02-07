@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********--> 
+
+<!-- node that renders Grid Screen 
+    handles bookmark buttons
+    handles start of video playback
+ -->
+<component name="SettingsScreen" extends="Group" initialFocus="RowList">
+    <interface>
+
+    </interface>
+    
+    <!-- main handler -->
+    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Settings/SettingsScreen.brs" />
+    <children>
+
+           
+    </children>
+</component>
