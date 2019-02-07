@@ -5,7 +5,7 @@
     handles bookmark buttons
     handles start of video playback
  -->
-<component name="SettingsScreen" extends="Group" initialFocus="RowList">
+<component name="SettingsScreen" extends="Group">
     <interface>
 
     </interface>

@@ -4,10 +4,15 @@ Function Init()
     
     ' loading indicator starts at initializatio of channel
     'm.loadingIndicator = m.top.findNode("loadingIndicator")
+    GetSettings()
     InitializeVideoPlayer()
     InitializeMenu()
     InitializeDialogs()
     InitializeScreens()  
+End Function
+
+Function GetSettings()
+    m.host = "172.16.254.20:6544"
 End Function
 
 Function InitializeVideoPlayer()
@@ -35,15 +40,18 @@ Function InitializeScreens()
     InitializeSettingsScreen()
 
     m.currentScreen = m.top.findNode("recordingsScreen")
+    m.currentScreen.visible = true
 End Function
 
 Function InitializeRecordingsScreen()
     m.recordingsScreen = m.top.findNode("recordingsScreen")
+    m.recordingsScreen.host = m.host
     m.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
 End Function
 
 Function InitializeVideosScreen()
     m.videosScreen = m.top.findNode("videosScreen")
+    m.videosScreen.host = m.host
     m.videosScreen.observeField("rowItemSelected", "OnItemSelected")
 End Function
 

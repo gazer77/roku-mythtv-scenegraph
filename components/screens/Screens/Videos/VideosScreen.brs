@@ -24,14 +24,14 @@ End Function
 Function GetContent()
     m.contentTask = createObject("roSGNode", "videosContentTask")
     m.contentTask.observeField("content","LoadContent")
-    m.contentTask.host = "172.16.254.20:6544"
+    m.contentTask.host = m.top.host
     m.contentTask.Control = "RUN"
 End Function
 
 Function LoadContent()
     json = m.contentTask.content
 
-    transformedContent = TransFormJson(json, "172.16.254.20:6544")
+    transformedContent = TransFormJson(json, m.top.host)
 	m.rowList.content  = ObjectToContentNode(transformedContent)   
 End Function
 

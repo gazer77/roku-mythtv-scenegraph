@@ -16,7 +16,7 @@
             width="90"
             height="32"  />
 
-        <RecordingsScreen id="recordingsScreen" />
+        <RecordingsScreen id="recordingsScreen" visible="false" />
         <VideosScreen id="videosScreen" visible="false" />
 
         <rectangle color="0x000000C4" width="90" height="720" translation="[20, 0]" />
