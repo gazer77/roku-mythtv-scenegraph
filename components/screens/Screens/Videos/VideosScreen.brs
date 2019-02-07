@@ -9,7 +9,16 @@ Function Init()
 
     m.top.observeField("focusedChild", "OnFocusedChildChange")
 
-    GetContent()
+    m.isInitialized = false
+
+    m.top.observeField("visible", "onVisibleChange")
+End Function
+
+Function onVisibleChange()
+    if m.top.visible and m.isInitialized = false then
+        GetContent()
+        m.isInitialized = true
+    end if
 End Function
 
 Function GetContent()
