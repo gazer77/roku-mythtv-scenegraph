@@ -33,13 +33,14 @@ Function InitializeDialogs()
 End Function
 
 Function InitializeScreens()
+    ? "Screens Init"
     InitializeRecordingsScreen()
     InitializeVideosScreen()
     InitializeMusicScreen()
     InitializeSchedulesScreen()
     InitializeSettingsScreen()
 
-    m.currentScreen = m.top.findNode("recordingsScreen")
+    m.currentScreen = m.recordingsScreen
     m.currentScreen.visible = true
 End Function
 
@@ -62,6 +63,7 @@ Function InitializeSchedulesScreen()
 End Function
 
 Function InitializeSettingsScreen()
+    m.settingsScreen = m.top.findNode("settingsScreen")
 End Function
 
 Function OnSelectedMenuChanged()
@@ -72,6 +74,7 @@ Function OnSelectedMenuChanged()
         m.recordingsScreen.visible = true
         m.currentScreen = m.recordingsScreen
     else if menuName = "buttonVideo"
+        ? "Vid: " ; m.videosScreen
         m.videosScreen.visible = true
         m.currentScreen = m.videosScreen
     else if menuName = "buttonMusic"
@@ -79,7 +82,8 @@ Function OnSelectedMenuChanged()
     else if menuName = "buttonSchedule"
         
     else if menuName = "buttonSettings"
-        
+        m.settingsScreen.visible = true
+        m.currentScreen = m.settingsScreen        
     end if
 End Function
 
@@ -166,7 +170,9 @@ Function HandleSchedule()
 End Function
 
 Function HandleSettings()
-    ? "Settings"
+    m.videosScreen.setFocus(true)
+
+    m.menuItemFocused = true
 End Function
 
 Function HandleOptions()

@@ -1,5 +1,4 @@
 Function ObjectToContentNode(rows As Object)
-    ? "[Content Task] Building Content"
     RowItems = createObject("RoSGNode","ContentNode")
 
     for each rowAA in rows
@@ -25,13 +24,10 @@ Function ObjectToContentNode(rows As Object)
         RowItems.appendChild(row)
     end for
 
-    ? "[Content Task] Content Built"
-
     return RowItems
 End Function
 
 Function TransFormJson(json as String, host as String)
-	? "[Content Task] Parsing"
     result = []
 
     jsonContent = ParseJSON(json)
@@ -63,7 +59,7 @@ Function TransFormJson(json as String, host as String)
         }
         videos.push(v)
     end for
-    
+
     videos.SortBy("Folder")
 
     row = { title: videos[0].Folder, videos: []}
@@ -81,8 +77,6 @@ Function TransFormJson(json as String, host as String)
     end for
     row.videos.SortBy("Title")
     result.push(row)
-
-    ? "[Content Task] Parsed"
 
     return result
 End Function

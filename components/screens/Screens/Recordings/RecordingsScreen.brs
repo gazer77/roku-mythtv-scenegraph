@@ -3,8 +3,6 @@
  ' creates all children
  ' sets all observers 
 Function Init()
-    ? "[Recordings] Init"
-
     m.rowList = m.top.findNode("RowList")
     m.description = m.top.findNode("Description")
     m.background = m.top.findNode("Background")

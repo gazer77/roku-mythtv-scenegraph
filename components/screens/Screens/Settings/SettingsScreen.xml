@@ -13,7 +13,10 @@
     <!-- main handler -->
     <script type="text/brightscript" uri="pkg:/components/screens/Screens/Settings/SettingsScreen.brs" />
     <children>
-
+        <LayoutGroup layoutDirection="horiz">
+            <Label text="Host:" />
+            <Label id="host" text="xxx.xxx.xxx.xxx" />
+        </LayoutGroup>
            
     </children>
 </component>
