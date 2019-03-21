@@ -19,11 +19,15 @@
 
         <!-- Interface to focused item (Content Node)--> 
         <field id="focusedContent"  type="node"/>
+
+        <field id="onContentOptionsDialogButtonSelected" type="int" alias="contentOptionsDialog.buttonSelected" onChange="OnContentOptionsDialogButtonSelected" alwaysNotify="true" />
+        <field id="onDeleteDialogButtonSelected" type="int" alias="deleteDialog.buttonSelected" onChange="OnDeleteDialogButtonSelected" alwaysNotify="true" />
     </interface>
     
     <!-- main handler -->
     <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreen.brs" />
     <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreenParse.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreenKeyHandler.brs" />
     <children>
         <!-- <FadingBackground
             id="Background"
@@ -58,6 +62,15 @@
             id="Description"
 			translation="[116, 60]"
             itemSpacings="[7,17]"/>
+
+        <Video
+            id="videoPlayer"
+            visible="false"
+            translation="[0, 0]"
+            width="1280"
+            height="720" />
            
+        <Dialog id="contentOptionsDialog" title="Options" visible="false" buttons="[&quot;Play&quot;,&quot;Delete&quot;]" />
+        <Dialog id="deleteDialog" title="Delete?" visible="false" buttons="[&quot;Yes&quot;,&quot;No&quot;]" />
     </children>
 </component>

@@ -47,13 +47,13 @@ End Function
 Function InitializeRecordingsScreen()
     m.recordingsScreen = m.top.findNode("recordingsScreen")
     m.recordingsScreen.host = m.host
-    m.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
+    'm.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
 End Function
 
 Function InitializeVideosScreen()
     m.videosScreen = m.top.findNode("videosScreen")
     m.videosScreen.host = m.host
-    m.videosScreen.observeField("rowItemSelected", "OnItemSelected")
+    'm.videosScreen.observeField("rowItemSelected", "OnItemSelected")
 End Function
 
 Function InitializeMusicScreen()
@@ -105,32 +105,10 @@ Function OnKeyEvent(key, press) as Boolean
 
         end if
         if key = "back"
-            if m.currentScreen.visible = false and m.videoPlayer.visible = true
-                ? "Back From Player"
-                m.videoPlayer.visible = false
-                result = true
-
-            else if m.videoPlayer.visible = false and m.menuItemFocused
-                m.buttonMenu.setFocus(true)
-                m.menuItemFocused = false
-                result = true
-            else
-                if m.videoPlayer.visible
-                    StopVideo()
-                    m.videoPlayer.visible = false
-                    result = true
-                end if
-            end if
-        else if key = "OK"
-            ? "[Home] Enter "; m.currentScreen.focusedContent.title
-
-            PlaySelected()
-        else if key = "play"
-            if m.currentScreen.focusedContent <> invalid
-                PlaySelected()
-            end if
+            m.buttonMenu.setFocus(true)
+            m.menuItemFocused = false
+            result = true
         end if
-
     end if
     return result
 End Function
@@ -179,76 +157,4 @@ Function HandleOptions()
     m.contentOptionsDialog.message = m.currentScreen.focusedContent.title + ": " + m.currentScreen.focusedContent.subTitle
     m.contentOptionsDialog.visible = true
     m.contentOptionsDialog.setFocus(true)
-End Function
-
-Function HandleDelete()
-    m.deleteDialog.title = "Delete " + m.currentScreen.focusedContent.title + "?"
-    m.deleteDialog.message = m.currentScreen.focusedContent.subTitle
-    m.deleteDialog.visible = true
-    m.deleteDialog.setFocus(true)
-End Function
-
-' event handler of Video player msg
-Function OnVideoPlayerStateChange()
-    ? "Player State: " ; m.videoPlayer.state
-    if m.videoPlayer.state = "error"
-        ' error handling
-        m.videoPlayer.visible = false
-    else if m.videoPlayer.state = "playing"
-        ' playback handling
-    else if m.videoPlayer.state = "finished"
-        m.videoPlayer.visible = false
-    else if m.videoPlayer.state = "stop"
-        m.videoPlayer.visible = false
-        HandleVideoStop()
-    end if
-End Function
-
-Function onVideoVisibleChange()
-    if m.videoPlayer.visible = false and m.top.visible = true
-        StopVideo()
-    end if
-End Function
-
-Function StopVideo()
-    m.currentScreen.setFocus(true)
-    m.videoPlayer.control = "stop"
-end Function
-
-' on Button press handler
-Function PlaySelected()
-    ' first button is Play
-    ? "Playing "; m.currentScreen.focusedContent.title
-    m.videoPlayer.content = m.currentScreen.focusedContent
-    m.videoPlayer.visible = true
-    m.videoPlayer.setFocus(true)
-    m.videoPlayer.control = "play"
-End Function
-
-Function OnContentOptionsDialogButtonSelected()
-    ? "Button Selected " ; m.contentOptionsDialog.buttonSelected
-
-    m.contentOptionsDialog.visible = false
-    if m.contentOptionsDialog.buttonSelected = 0
-        PlaySelected()
-    end if   
-    if m.contentOptionsDialog.buttonSelected = 1
-        HandleDelete()
-    end if
-End Function
-
-Function OnDeleteDialogButtonSelected()
-    ? "Button Selected " ; m.deleteDialog.buttonSelected
-    if m.deleteDialog.buttonSelected = 0
-        Delete()
-    end if
-
-    m.deleteDialog.visible = false
-    m.currentScreen.setFocus(true)
-End Function
-
-Function HandleVideoStop()
-End Function
-
-Function Delete()
 End Function

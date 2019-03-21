@@ -55,7 +55,7 @@ Function TransFormJson(json as String, host as String)
             length: video.Length,
             streamFormat: "mp4",
             description: video.Description,
-            HDPosterUrl: "http://" + host + "/Content/GetVideoArtwork?Id=" + video.Id
+            HDPosterUrl: "http://" + host + "/Content/GetVideoArtwork?Id=" + video.Id + "&width=147"
         }
         videos.push(v)
     end for

@@ -10,6 +10,7 @@ Function ObjectToContentNode(rows As Object)
 
             'create fields that ContentNode doesn't have
             item.addFields({
+                Id: "",
                 SubTitle: "",
                 RecordedDate: "",
                 AirDate: ""
@@ -48,6 +49,7 @@ Function TransFormJson(json as String, host as String)
         stream = "http://" + host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
 
         item = {
+            id: program.Recording.RecordedId,
             title: program.title,
             subTitle: program.SubTitle,
             airDate: program.Airdate,
@@ -58,7 +60,7 @@ Function TransFormJson(json as String, host as String)
             url: stream,
             streamFormat: "mp4",
             description: program.Description,
-            HDPosterUrl: "http://" + host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId,
+            HDPosterUrl: "http://" + host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId + "&width=262",
             HdBifUrl: "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_hd.bif",
             SdBifUrl: "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_sd.bif" '1621_20180410020000_hd.bif
         }
@@ -76,6 +78,14 @@ Function TransFormJson(json as String, host as String)
     end for
     row.videos.SortBy("recordedDate", "r")
     result.push(row)
+
+    recentRow = { title: "Latest", videos: []}
+
+    for each item in result
+        recentRow.videos.push(item.videos[0])
+    end for
+
+    result.unshift(recentRow)
 
     return result
 End Function

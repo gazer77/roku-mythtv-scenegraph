@@ -12,6 +12,13 @@ Function Init()
     m.isInitialized = false
 
     m.top.observeField("visible", "onVisibleChange")
+
+    InitializeVideoPlayer()
+End Function
+
+Function InitializeVideoPlayer()
+    m.videoPlayer = m.top.findNode("videoPlayer")
+    m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
 End Function
 
 Function onVisibleChange()
@@ -58,3 +65,41 @@ Sub OnFocusedChildChange()
         m.rowList.setFocus(true)
     end if
 End Sub
+
+Function OnVideoPlayerStateChange()
+    ? "Player State: " ; m.videoPlayer.state
+    if m.videoPlayer.state = "error"
+        ' error handling
+        m.videoPlayer.visible = false
+    else if m.videoPlayer.state = "playing"
+        ' playback handling
+    else if m.videoPlayer.state = "finished"
+        m.videoPlayer.visible = false
+    else if m.videoPlayer.state = "stop"
+        m.videoPlayer.visible = false
+        HandleVideoStop()
+    end if
+End Function
+
+Function onVideoVisibleChange()
+    if m.videoPlayer.visible = false and m.top.visible = true
+        StopVideo()
+    end if
+End Function
+
+Function HandleVideoStop()
+End Function
+
+Function StopVideo()
+    m.top.setFocus(true)
+    m.videoPlayer.control = "stop"
+end Function
+
+Function PlaySelected()
+    ' first button is Play
+    ? "Playing "; m.top.focusedContent.title
+    m.videoPlayer.content = m.top.focusedContent
+    m.videoPlayer.visible = true
+    m.videoPlayer.setFocus(true)
+    m.videoPlayer.control = "play"
+End Function

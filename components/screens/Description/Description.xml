@@ -46,16 +46,23 @@
             color="0xFFFFFF"
             text=""
             font="font:MediumBoldSystemFont" />
-            
-        <Label
-            id="AirDate"
-            color="0xFFFFFF"
-            text=""/>
 
-        <Label
-            id="RecordedDate"
-            color="0xFFFFFF"
-            text=""/>
+        <LayoutGroup layoutDirection="horiz" itemSpacings="[50]">
+            <LayoutGroup>
+                <Label text="Aired" />
+                <Label
+                    id="AirDate"
+                    color="0xFFFFFF"
+                    text=""/>
+            </LayoutGroup>
+            <LayoutGroup>
+                <Label text="Recorded" />
+                <Label
+                    id="RecordedDate"
+                    color="0xFFFFFF"
+                    text=""/>
+            </LayoutGroup>
+        </LayoutGroup>
         
         <Label
             id="Description"
