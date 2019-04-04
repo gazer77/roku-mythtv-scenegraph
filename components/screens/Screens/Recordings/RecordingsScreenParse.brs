@@ -1,36 +1,5 @@
-Function ObjectToContentNode(rows As Object)
-    RowItems = createObject("RoSGNode","ContentNode")
-
-    for each rowAA in rows
-        row = createObject("RoSGNode","ContentNode")
-        row.Title = rowAA.title
-
-        for each video in rowAA.videos
-            item = createObject("RoSGNode","ContentNode")
-
-            'create fields that ContentNode doesn't have
-            item.addFields({
-                Id: "",
-                SubTitle: "",
-                RecordedDate: "",
-                AirDate: ""
-            })
-            
-            ' We don't use item.setFields(video) as doesn't cast streamFormat to proper value
-            for each key in video
-                item[key] = video[key]
-            end for
-            row.appendChild(item)
-        end for
-        RowItems.appendChild(row)
-    end for
-
-    return RowItems
-End Function
-
-
-Function TransFormJson(json as String, host as String)
-    result = []
+Function TransformJson(json as String, host as String, positions as object)
+    list = createObject("RoSGNode","ContentNode")
 
     jsonContent = ParseJSON(json)
 
@@ -42,50 +11,92 @@ Function TransFormJson(json as String, host as String)
 
     programs.SortBy("Title")
 
-    row = { title: programs[0].Title, videos: []}
+    recentRow = CreateContentRow("Latest")
+    row = createObject("roArray", 0, true)
+    
     lastTitle = ""
 
+    rowIndex = 1
     for each program in programs
-        stream = "http://" + host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
 
-        item = {
-            id: program.Recording.RecordedId,
-            title: program.title,
-            subTitle: program.SubTitle,
-            airDate: program.Airdate,
-            recordedDate: program.Recording.StartTs,
-            stream: {
-                url : stream
-            },
-            url: stream,
-            streamFormat: "mp4",
-            description: program.Description,
-            HDPosterUrl: "http://" + host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId + "&width=262",
-            HdBifUrl: "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_hd.bif",
-            SdBifUrl: "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_sd.bif" '1621_20180410020000_hd.bif
-        }
+        position = 0.0
+        if positions[program.Recording.RecordedId] <> invalid then
+            position = positions[program.Recording.RecordedId].tofloat()
+        end if
 
-        'item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
+        item = CreateContentNode(program, host, -1, -1, position)
+
+        if(rowIndex = 1) then
+            recentRow.appendChild(item)
+        end if
                 
         if program.Title <> lastTitle And lastTitle <> "" then
-            row.videos.SortBy("recordedDate", "r")
-            result.push(row)
-            row = { title: program.Title, videos: []}
+            '? "Title: " ; lastTitle ; " " ; rowIndex
+            HandleNewRow(host, list, lastTitle, rowIndex, row, recentRow)
+
+            row = createObject("roArray", 0, true)
+            rowIndex++
         end if
-        row.videos.push(item)
+        row.push(item)
 
         lastTitle = program.Title
     end for
-    row.videos.SortBy("recordedDate", "r")
-    result.push(row)
+    HandleNewRow(host, list, lastTitle, rowIndex, row, recentRow)
 
-    recentRow = { title: "Latest", videos: []}
+    list.insertChild(recentRow, 0)
 
-    for each item in result
-        recentRow.videos.push(item.videos[0])
-    end for
+    return list
+End Function
 
-    result.unshift(recentRow)
+Function HandleNewRow(host as string, list as object, rowTitle as string, rowIndex as integer, row as object, recentRow as object)
+    row.SortBy("recordedDate", "r")
 
-    return result
+    row[0].rowIndex = 0
+    row[0].columnIndex = recentRow.getChildCount()
+
+    contentRow = CreateContentRow(rowTitle)
+    contentRow.appendChildren(row)
+    list.appendChild(contentRow)
+
+    recentItem = CreateContentNode(row[0].json, host, rowIndex, 0, row[0].position)
+    recentRow.appendChild(recentItem)
+End Function
+
+Function CreateContentRow(title as string)
+    row = createObject("RoSGNode","ContentNode")
+
+    row.Title = title
+
+    return row
+End Function
+
+Function CreateContentNode(program as object, host as string, rowIndex as integer, columnIndex as integer, position as float)
+    contentNode = createObject("RoSGNode","ContentNode")
+
+    'create fields that ContentNode doesn't have
+    'Row & Column indexes are only set on the
+    'Latest row items
+    contentNode.addFields({
+            subTitle: program.SubTitle,
+            airDate: program.Airdate,
+            recordedDate: program.Recording.StartTs,
+            json: program,
+            rowIndex: rowIndex,
+            columnIndex: columnIndex,
+            position: position
+    })
+
+    contentNode.id = program.Recording.RecordedId
+    contentNode.Title = program.title
+    contentNode.stream = {
+                url : "http://" + host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
+            }
+    contentNode.url = "http://" + host + "/Content/GetRecording?RecordedId=" + program.Recording.RecordedId
+    contentNode.streamFormat = "mp4"
+    contentNode.description = program.Description
+    contentNode.HdPosterUrl = "http://" + host + "/Content/GetPreviewImage?RecordedId=" + program.Recording.RecordedId + "&width=262"
+    contentNode.HdBifUrl = "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_hd.bif"
+    contentNode.SdBifUrl = "http://" + host + "/Content/GetFile?StorageGroup=Recordings&FileName=" + Left(program.FileName, Len(program.FileName) - 4) + "_sd.bif" '1621_20180410020000_hd.bif
+
+    return contentNode
 End Function

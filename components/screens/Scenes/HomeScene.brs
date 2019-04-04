@@ -94,7 +94,6 @@ End Function
 
 ' Main Remote keypress event loop
 Function OnKeyEvent(key, press) as Boolean
-    ? ">>> HomeScene >> OnkeyEvent " ; key ; " " ; press
     result = false
     if press then
         if key = "right"

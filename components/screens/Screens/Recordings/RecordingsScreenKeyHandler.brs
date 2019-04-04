@@ -1,15 +1,15 @@
 Function OnKeyEvent(key, press) as Boolean
     result = false
     if press then
-        if key = "back"
-            if m.videoPlayer.visible
+        if key = "back" then
+            if m.videoPlayer.visible then
                 StopVideo()
                 m.videoPlayer.visible = false
                 result = true
             end if
-        else if key = "play"
+        else if key = "play" then
             if m.top.focusedContent <> invalid
-                PlaySelected()
+                PlaySelected(false)
                 result = true
             end if
         end if
