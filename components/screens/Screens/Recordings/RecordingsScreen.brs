@@ -125,6 +125,8 @@ Sub OnItemFocused()
         row = m.top.content.getChild(itemFocused[0])
         focusedContent = row.getChild(itemFocused[1])
         
+        ? "Row: " ; focusedContent.rowIndex ; " Column: " ; focusedContent.columnIndex
+
         if focusedContent <> invalid then
             m.top.focusedContent = focusedContent
             m.description.content = focusedContent
@@ -171,7 +173,7 @@ Function HandleOptionsDialogButton(button as string)
         PlaySelected(false)
     else if button = "Restart"
         PlaySelected(true)
-    else if  button = "Delete" then
+    else if button = "Delete" then
         HandleDelete()
     end if
 End Function
@@ -195,8 +197,6 @@ Function OnDeleteDialogButtonSelected()
 End Function
 
 Function Delete()
-   ? "Deleting " ; m.top.focusedContent.title
-
     m.deleteRecordingTask = createObject("roSGNode", "deleteRecordingTask")
     m.deleteRecordingTask.observeField("success","DeleteComplete")
     m.deleteRecordingTask.host = m.host
@@ -205,47 +205,45 @@ Function Delete()
 End Function
 
 Function DeleteComplete()
-    ? "Delete? "; m.deleteRecordingTask.success
-
     if m.deleteRecordingTask.success then
-        
-        rowIndex = m.rowList.rowItemSelected[0]
-        itemIndex = m.rowList.rowItemSelected[1]
-        originRowIndex = m.top.focusedContent.rowindex
-        originColumnIndex = m.top.focusedContent.columnindex
+        isRecentItem = false
+        itemRow = m.rowList.rowItemSelected[0]
+        itemColumn = m.rowList.rowItemSelected[1]
 
-        if rowIndex = 0 then
-            if m.top.content.getChild(originRowIndex).getChildCount() > 1 then
-                ReplaceRecentItem(originRowIndex, originColumnIndex, itemIndex)
-                RemoveFirstItem(originRowIndex, itemIndex)
+        if itemRow = 0 then
+            isRecentItem = true
+
+            itemRow = itemColumn + 1
+            itemColumn = 0
+        end if
+
+        ? "Recent: " ; isRecentItem ; "  " ; itemRow ; ", " ; itemColumn
+
+        if isRecentItem or itemColumn = 0 then
+            'there are more items in the origin row to replace the recent
+            if m.top.content.getChild(itemRow).getChildCount() > 1 then
+                ReplaceRecentItem(itemRow, itemColumn)
+                RemoveFromRow(itemRow, 0)
             else
-                RemoveFromRow(rowIndex, itemIndex)
-                RemoveFromRow(originRowIndex, originColumnIndex)
-                m.top.content.removeChildIndex(originRowIndex)
-                ReIndexRecentRow(rowIndex)
+                'remove the row
+                m.top.content.removeChildIndex(itemRow)
+
+                'the recent item corresponds to the row - 1
+                'converting what amounts to a 1 based array to a 0 based
+                RemoveFromRow(0, itemRow - 1)
             end if
         else
-            if columnIndex = 0 then
-                if m.top.content.getChild(rowIndex).getChildCount() > 1 then
-                    ReplaceRecentItem(rowIndex, columnIndex, originColumnIndex)
-                    RemoveFirstItem(originRowIndex, itemIndex)
-                else
-                    RemoveFromRow(rowIndex, itemIndex)
-                    RemoveFromRow(originRowIndex, originColumnIndex)
-                    m.top.content.removeChildIndex(rowIndex)
-                    ReIndexRecentRow(0)
-                end if                
-            end if
-            RemoveFromRow(rowIndex, itemIndex)
+            RemoveFromRow(itemRow, itemColumn)
         end if
     end if
 End Function
 
-Function ReplaceRecentItem(originRowIndex, originColumnIndex, itemIndex)
-    replacementJson = m.top.content.getChild(originRowIndex).getChild(originColumnIndex + 1).json
-    replacement = CreateContentNode(replacementJson, m.top.host, originRowIndex, 0)
+Function ReplaceRecentItem(originRowIndex, originColumnIndex)
+    replacementCanidate = m.top.content.getChild(originRowIndex).getChild(originColumnIndex + 1)
+    replacementJson = replacementCanidate.json
+    replacement = CreateContentNode(replacementJson, m.top.host, replacementCanidate.position)
 
-    m.top.content.getChild(0).replaceChild(replacement, itemIndex)
+    m.top.content.getChild(0).replaceChild(replacement, originRowIndex - 1)
 End Function
 
 Function RemoveFromRow(rowIndex as integer, columnIndex as integer)
@@ -254,31 +252,10 @@ Function RemoveFromRow(rowIndex as integer, columnIndex as integer)
     m.top.content.getChild(rowIndex).removeChildIndex(columnIndex)
 End Function
 
-Function RemoveFirstItem(originRowIndex, itemIndex)
-    RemoveFromRow(originRowIndex, 0)
-
-    firstItem = m.top.content.getChild(originRowIndex).getChild(0)
-    firstItem.rowIndex = 0
-    firstItem.columnindex = itemIndex
-End Function
-
 'Move a child to the end of the row by getting it and appending it
 Function MoveToEndOfRow(rowIndex as integer, columnIndex as integer)
     item = m.top.content.getChild(rowIndex).getChild(columnIndex)
     m.top.content.getChild(rowIndex).appendChild(item)
-End Function
-
-'when a row is removed all the row indexes after the removed row
-'need to have their row index decremented to point to the correct
-'row
-Function ReIndexRecentRow(removedRowIndex)
-    for each item in m.top.content.getChild(0).getChildren(-1, 0)
-        if item.rowIndex > removedRowIndex then
-            ? "Row Index: " ; item.rowIndex
-            item.rowIndex--
-            ? "New Row Index: " ; item.rowIndex
-        end if
-    end for
 End Function
 
 Function DeletePosition(id as string)

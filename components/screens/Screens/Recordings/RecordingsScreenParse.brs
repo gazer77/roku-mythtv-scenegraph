@@ -24,7 +24,7 @@ Function TransformJson(json as String, host as String, positions as object)
             position = positions[program.Recording.RecordedId].tofloat()
         end if
 
-        item = CreateContentNode(program, host, -1, -1, position)
+        item = CreateContentNode(program, host, position)
 
         if(rowIndex = 1) then
             recentRow.appendChild(item)
@@ -32,7 +32,7 @@ Function TransformJson(json as String, host as String, positions as object)
                 
         if program.Title <> lastTitle And lastTitle <> "" then
             '? "Title: " ; lastTitle ; " " ; rowIndex
-            HandleNewRow(host, list, lastTitle, rowIndex, row, recentRow)
+            HandleNewRow(host, list, lastTitle, row, recentRow)
 
             row = createObject("roArray", 0, true)
             rowIndex++
@@ -41,24 +41,21 @@ Function TransformJson(json as String, host as String, positions as object)
 
         lastTitle = program.Title
     end for
-    HandleNewRow(host, list, lastTitle, rowIndex, row, recentRow)
+    HandleNewRow(host, list, lastTitle, row, recentRow)
 
     list.insertChild(recentRow, 0)
 
     return list
 End Function
 
-Function HandleNewRow(host as string, list as object, rowTitle as string, rowIndex as integer, row as object, recentRow as object)
+Function HandleNewRow(host as string, list as object, rowTitle as string, row as object, recentRow as object)
     row.SortBy("recordedDate", "r")
-
-    row[0].rowIndex = 0
-    row[0].columnIndex = recentRow.getChildCount()
 
     contentRow = CreateContentRow(rowTitle)
     contentRow.appendChildren(row)
     list.appendChild(contentRow)
 
-    recentItem = CreateContentNode(row[0].json, host, rowIndex, 0, row[0].position)
+    recentItem = CreateContentNode(row[0].json, host, row[0].position)
     recentRow.appendChild(recentItem)
 End Function
 
@@ -70,7 +67,7 @@ Function CreateContentRow(title as string)
     return row
 End Function
 
-Function CreateContentNode(program as object, host as string, rowIndex as integer, columnIndex as integer, position as float)
+Function CreateContentNode(program as object, host as string, position as float)
     contentNode = createObject("RoSGNode","ContentNode")
 
     'create fields that ContentNode doesn't have
@@ -81,8 +78,6 @@ Function CreateContentNode(program as object, host as string, rowIndex as intege
             airDate: program.Airdate,
             recordedDate: program.Recording.StartTs,
             json: program,
-            rowIndex: rowIndex,
-            columnIndex: columnIndex,
             position: position
     })
 
