@@ -5,23 +5,20 @@
     handles bookmark buttons
     handles start of video playback
  -->
-<component name="RecordingsScreen" extends="Group" initialFocus="RowList">
+<component name="VideosScreen" extends="Group" initialFocus="RowList">
     <interface>
         <field id="host" type="string" />
         <!-- Grid Content Node -->
-        <field id="content" type="node" alias="RowList.content" />
-        <!-- onChange="onContentChange" -->
-        <!-- Interface to focused item (Content Node)--> 
-        <field id="focusedContent"  type="node"/>
+        <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
 
         <field id="onContentOptionsDialogButtonSelected" type="int" alias="contentOptionsDialog.buttonSelected" onChange="OnContentOptionsDialogButtonSelected" alwaysNotify="true" />
-        <field id="onDeleteDialogButtonSelected" type="int" alias="deleteDialog.buttonSelected" onChange="OnDeleteDialogButtonSelected" alwaysNotify="true" />
     </interface>
     
     <!-- main handler -->
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreen.brs" />
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreenParse.brs" />
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Recordings/RecordingsScreenKeyHandler.brs" />
+    <script type="text/brightscript" uri="pkg:/source/StringUtility.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Pages/Videos/VideosScreenKeyHandler.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Pages/Videos/VideosScreen.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Pages/Videos/VideosScreenParse.brs" />
     <children>
         <!-- <FadingBackground
             id="Background"
@@ -36,14 +33,14 @@
 			translation="[-25, 372]"
 			itemSize="[1327, 218]"
 			numRows="2"
-			itemSpacing="[13, 0]"
+			itemSpacing="[13, 55]"
 			focusXOffset="[147]"
 			rowFocusAnimationStyle="fixedFocusWrap"
-			rowItemSize="[[262, 147]]"
+			rowItemSize="[[147, 218]]"
 			rowItemSpacing="[[16.5, 3]]"
 			showRowLabel="true"
 			showRowCounter="true"
-			rowLabelOffset="[[147, 20]]"
+			rowLabelOffset="[[147, 15]]"
             />
             
         <Poster
@@ -52,7 +49,7 @@
             width="2000"
             height="95" />
 
-        <Description
+        <DescriptionVideo
             id="Description"
 			translation="[116, 60]"
             itemSpacings="[7,17]"/>
@@ -62,10 +59,8 @@
             visible="false"
             translation="[0, 0]"
             width="1280"
-            height="720"
-            enableTrickPlay="true" />
-           
-        <Dialog id="contentOptionsDialog" title="Options" visible="false" optionsDialog="true" />
-        <Dialog id="deleteDialog" title="Delete?" visible="false" optionsDialog="true" buttons="[&quot;Yes&quot;,&quot;No&quot;]" />
+            height="720" />
+
+        <Dialog id="contentOptionsDialog" title="Options" visible="false" buttons="[&quot;Resume&quot;,&quot;Restart&quot;]" />
     </children>
 </component>

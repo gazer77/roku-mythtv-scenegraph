@@ -37,10 +37,10 @@ Function InitializeRegistry()
 End Function
 
 Function OnItemSelected()
-    m.contentOptionsDialog.message = m.top.focusedContent.title + ": " + m.top.focusedContent.subTitle
+    m.contentOptionsDialog.message = m.focusedContent.title + ": " + m.focusedContent.subTitle
     m.contentOptionsDialog.visible = true
 
-    if m.top.focusedContent.position > 0 then
+    if m.focusedContent.position > 0 then
         m.contentOptionsDialog.buttons = ["Resume","Restart","Delete"]
     else
         m.contentOptionsDialog.buttons = ["Play","Delete"]
@@ -62,34 +62,48 @@ End Function
 Function OnVideoPlayerStateChange()
     ? "Player State: " ; m.videoPlayer.state
     if m.videoPlayer.state = "error"
-        HandleVideoStop()
+        HandleVideoStop(false)
         m.videoPlayer.visible = false
     else if m.videoPlayer.state = "playing"
         ' playback handling
     else if m.videoPlayer.state = "finished"
-        HandleVideoStop()
+        HandleVideoStop(true)
     else if m.videoPlayer.state = "stopped"
-        HandleVideoStop()
+        HandleVideoStop(false)
     end if
 End Function
 
 Function onVideoVisibleChange()
-    if m.videoPlayer.visible = false and m.top.visible = true
+    if m.videoPlayer.visible = false and m.top.visible = true then
         StopVideo()
     end if
 End Function
 
-Function HandleVideoStop()
+Function HandleVideoStop(isFinished as boolean)
     m.videoPlayer.visible = false
 
-    id = m.top.focusedContent.id
+    totalLength = m.videoPlayer.duration
+
+    id = m.focusedContent.id
     position = m.videoPlayer.position
 
-    m.top.focusedContent.position = position
+    if isFinished then
+        position = 0
+    end if
+    
+    m.focusedContent.position = position
 
-    SaveTimeStamp(id, position)
+    if isFinished then
+        DeletePosition(id)
+    else
+        SaveTimeStamp(id, position)
+    end if
 
     m.RowList.setFocus(true)
+
+    if isFinished or position <= totalLength - m.top.deleteThreshold then
+        HandleDelete()
+    end if
 End Function
 
 Function StopVideo()
@@ -128,7 +142,7 @@ Sub OnItemFocused()
         ? "Row: " ; focusedContent.rowIndex ; " Column: " ; focusedContent.columnIndex
 
         if focusedContent <> invalid then
-            m.top.focusedContent = focusedContent
+            m.focusedContent = focusedContent
             m.description.content = focusedContent
             'm.background.uri = focusedContent.hdBackgroundImageUrl
         end if
@@ -148,15 +162,15 @@ End Function
 
 Function PlaySelected(startOver as boolean)
     ' first button is Play
-    ? "Playing "; m.top.focusedContent.title
+    ? "Playing "; m.focusedContent.title
 
-    m.videoPlayer.content = m.top.focusedContent
+    m.videoPlayer.content = m.focusedContent
     m.videoPlayer.visible = true
     m.videoPlayer.setFocus(true)
     m.videoPlayer.control = "play"
 
     if not startOver then
-       m.videoPlayer.seek = m.top.focusedContent.position
+       m.videoPlayer.seek = m.focusedContent.position
     end if
 End Function
 
@@ -179,8 +193,8 @@ Function HandleOptionsDialogButton(button as string)
 End Function
 
 Function HandleDelete()
-    m.deleteDialog.title = "Delete " + m.top.focusedContent.title + "?"
-    m.deleteDialog.message = m.top.focusedContent.subTitle
+    m.deleteDialog.title = "Delete " + m.focusedContent.title + "?"
+    m.deleteDialog.message = m.focusedContent.subTitle
     m.deleteDialog.visible = true
 
     m.top.getParent().dialog = m.deleteDialog
@@ -193,14 +207,13 @@ Function OnDeleteDialogButtonSelected()
     end if
 
     m.deleteDialog.close = true
-    'm.RowList.setFocus(true)
 End Function
 
 Function Delete()
     m.deleteRecordingTask = createObject("roSGNode", "deleteRecordingTask")
     m.deleteRecordingTask.observeField("success","DeleteComplete")
     m.deleteRecordingTask.host = m.host
-    m.deleteRecordingTask.recordingId = m.top.focusedContent.id
+    m.deleteRecordingTask.recordingId = m.focusedContent.id
     m.deleteRecordingTask.Control = "RUN"
 End Function
 
@@ -247,7 +260,7 @@ Function ReplaceRecentItem(originRowIndex, originColumnIndex)
 End Function
 
 Function RemoveFromRow(rowIndex as integer, columnIndex as integer)
-    DeletePosition(m.top.focusedContent.id)
+    DeletePosition(m.focusedContent.id)
 
     m.top.content.getChild(rowIndex).removeChildIndex(columnIndex)
 End Function

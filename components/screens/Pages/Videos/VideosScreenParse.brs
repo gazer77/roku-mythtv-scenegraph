@@ -12,7 +12,8 @@ Function ObjectToContentNode(rows As Object)
             item.addFields({
                 SubTitle: "",
                 ReleasedDate: "",
-                Folder: ""
+                Folder: "",
+                position: 0.0
             })
             
             ' We don't use item.setFields(video) as doesn't cast streamFormat to proper value
@@ -27,18 +28,23 @@ Function ObjectToContentNode(rows As Object)
     return RowItems
 End Function
 
-Function TransFormJson(json as String, host as String)
+Function TransFormJson(json as String, host as String, positions as Object)
     result = []
 
     jsonContent = ParseJSON(json)
 
-    videos = [] 'createObject("roArray", 0, true)
+    videos = []
     
     for each video in jsonContent.VideoMetadataInfoList.VideoMetadataInfos
         parts = Split("/", video.FileName)
         folder = "Other"
         if parts.Count() > 1 then
             folder = ProcessFolderName(parts[0])
+        end if
+
+        position = 0.0
+        if positions[video.Id] <> invalid then
+            position = positions[video.Id].tofloat()
         end if
 
         stream = "http://" + host + "/Content/GetVideo?Id=" + video.Id
@@ -55,7 +61,8 @@ Function TransFormJson(json as String, host as String)
             length: video.Length,
             streamFormat: "mp4",
             description: video.Description,
-            HDPosterUrl: "http://" + host + "/Content/GetVideoArtwork?Id=" + video.Id + "&width=147"
+            HDPosterUrl: "http://" + host + "/Content/GetVideoArtwork?Id=" + video.Id + "&width=147",
+            position: position
         }
         videos.push(v)
     end for

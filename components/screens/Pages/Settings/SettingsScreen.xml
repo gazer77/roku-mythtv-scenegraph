@@ -11,7 +11,7 @@
     </interface>
     
     <!-- main handler -->
-    <script type="text/brightscript" uri="pkg:/components/screens/Screens/Settings/SettingsScreen.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Pages/Settings/SettingsScreen.brs" />
     <children>
         <LayoutGroup>
             <LayoutGroup layoutDirection="horiz">

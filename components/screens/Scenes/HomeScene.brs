@@ -13,6 +13,7 @@ End Function
 
 Function GetSettings()
     m.host = "172.16.254.20:6544"
+    m.deleteThreshold = 60.0
 End Function
 
 Function InitializeVideoPlayer()
@@ -47,13 +48,12 @@ End Function
 Function InitializeRecordingsScreen()
     m.recordingsScreen = m.top.findNode("recordingsScreen")
     m.recordingsScreen.host = m.host
-    'm.recordingsScreen.observeField("rowItemSelected", "OnItemSelected")
+    m.recordingsScreen.deleteThreshold = m.deleteThreshold
 End Function
 
 Function InitializeVideosScreen()
     m.videosScreen = m.top.findNode("videosScreen")
     m.videosScreen.host = m.host
-    'm.videosScreen.observeField("rowItemSelected", "OnItemSelected")
 End Function
 
 Function InitializeMusicScreen()
