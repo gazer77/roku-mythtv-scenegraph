@@ -22,6 +22,7 @@ Function TransformJson(json as String, host as String, positions as object)
         position = 0.0
         if positions[program.Recording.RecordedId] <> invalid then
             position = positions[program.Recording.RecordedId].tofloat()
+            positions.delete(program.Recording.RecordedId)
         end if
 
         item = CreateContentNode(program, host, position)
@@ -44,6 +45,11 @@ Function TransformJson(json as String, host as String, positions as object)
     HandleNewRow(host, list, lastTitle, row, recentRow)
 
     list.insertChild(recentRow, 0)
+
+    for each id in positions
+        ? "Deleting Recoring Position For " ; id
+        DeletePosition(id)
+    end for
 
     return list
 End Function

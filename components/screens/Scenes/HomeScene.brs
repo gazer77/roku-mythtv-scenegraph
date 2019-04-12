@@ -5,7 +5,6 @@ Function Init()
     ' loading indicator starts at initializatio of channel
     'm.loadingIndicator = m.top.findNode("loadingIndicator")
     GetSettings()
-    InitializeVideoPlayer()
     InitializeMenu()
     InitializeDialogs()
     InitializeScreens()  
@@ -14,11 +13,6 @@ End Function
 Function GetSettings()
     m.host = "172.16.254.20:6544"
     m.deleteThreshold = 60.0
-End Function
-
-Function InitializeVideoPlayer()
-    m.videoPlayer = m.top.findNode("videoPlayer")
-    m.videoPlayer.observeField("state", "OnVideoPlayerStateChange")
 End Function
 
 Function InitializeMenu()
@@ -47,12 +41,14 @@ End Function
 
 Function InitializeRecordingsScreen()
     m.recordingsScreen = m.top.findNode("recordingsScreen")
+    m.recordingsScreen.observeField("playing", "OnPlaying")
     m.recordingsScreen.host = m.host
     m.recordingsScreen.deleteThreshold = m.deleteThreshold
 End Function
 
 Function InitializeVideosScreen()
     m.videosScreen = m.top.findNode("videosScreen")
+    m.videosScreen.observeField("playing", "OnPlaying")
     m.videosScreen.host = m.host
 End Function
 
@@ -64,6 +60,11 @@ End Function
 
 Function InitializeSettingsScreen()
     m.settingsScreen = m.top.findNode("settingsScreen")
+End Function
+
+Function OnPlaying()
+    ? "Playing State Changed"
+    m.buttonMenu.visible = not m.currentScreen.playing
 End Function
 
 Function OnSelectedMenuChanged()

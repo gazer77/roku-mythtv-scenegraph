@@ -80,6 +80,7 @@ Function onVideoVisibleChange()
 End Function
 
 Function HandleVideoStop(isFinished as boolean)
+    m.top.playing = false
     m.videoPlayer.visible = false
 
     totalLength = m.videoPlayer.duration
@@ -101,7 +102,7 @@ Function HandleVideoStop(isFinished as boolean)
 
     m.RowList.setFocus(true)
 
-    if isFinished or position <= totalLength - m.top.deleteThreshold then
+    if isFinished or position >= totalLength - m.top.deleteThreshold then
         HandleDelete()
     end if
 End Function
@@ -138,8 +139,6 @@ Sub OnItemFocused()
     If itemFocused.Count() = 2 then
         row = m.top.content.getChild(itemFocused[0])
         focusedContent = row.getChild(itemFocused[1])
-        
-        ? "Row: " ; focusedContent.rowIndex ; " Column: " ; focusedContent.columnIndex
 
         if focusedContent <> invalid then
             m.focusedContent = focusedContent
@@ -161,13 +160,12 @@ Function NoDialogVisible()
 End Function
 
 Function PlaySelected(startOver as boolean)
-    ' first button is Play
-    ? "Playing "; m.focusedContent.title
-
     m.videoPlayer.content = m.focusedContent
     m.videoPlayer.visible = true
     m.videoPlayer.setFocus(true)
     m.videoPlayer.control = "play"
+
+    m.top.playing = true
 
     if not startOver then
        m.videoPlayer.seek = m.focusedContent.position
@@ -201,7 +199,6 @@ Function HandleDelete()
 End Function
 
 Function OnDeleteDialogButtonSelected()
-    ? "Button Selected " ; m.deleteDialog.buttonSelected
     if m.deleteDialog.buttonSelected = 0
         Delete()
     end if
@@ -229,8 +226,6 @@ Function DeleteComplete()
             itemRow = itemColumn + 1
             itemColumn = 0
         end if
-
-        ? "Recent: " ; isRecentItem ; "  " ; itemRow ; ", " ; itemColumn
 
         if isRecentItem or itemColumn = 0 then
             'there are more items in the origin row to replace the recent

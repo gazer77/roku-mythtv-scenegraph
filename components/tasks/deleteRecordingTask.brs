@@ -17,7 +17,6 @@ Function DeleteRecordingApi(apiUrl, recordingId)
     
     urlTransfer.PostFromString("RecordedId=" + recordingId + "&ForceDelete=1")
     
-    ? "Delete Response: " ; apiUrl ; " " ; response
     if response = 200 then
         return true
     else

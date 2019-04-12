@@ -56,8 +56,6 @@ Function LoadContent()
 
     positionKeys = m.videoPositions.GetKeyList()
 
-    ? "Position Keys: " ; positionKeys
-
     positions = m.videoPositions.ReadMulti(positionKeys)
 
     transformedContent = TransFormJson(json, m.top.host, positions)
@@ -73,7 +71,6 @@ Sub OnItemFocused()
     'and element 1 contains the index of the focused item in that row.
     If itemFocused.Count() = 2 then
         focusedContent = m.top.content.getChild(itemFocused[0]).getChild(itemFocused[1])
-        ? "Focused: " ; focusedContent.title
         if focusedContent <> invalid then
             m.focusedContent = focusedContent
             m.description.content = focusedContent
@@ -83,13 +80,10 @@ Sub OnItemFocused()
 End Sub
 
 Function OnItemSelected()
-    ? "Item Selected" ; m.focusedContent.title
     if m.focusedContent <> invalid then
-        ? "Focused: " ; m.focusedContent.title
         if (m.focusedContent.position = 0)
             PlaySelected(false)
         else
-            ? "Show Options"
             m.contentOptionsDialog.visible = true
             m.top.getParent().dialog = m.contentOptionsDialog
         end if
@@ -122,28 +116,30 @@ End Function
 
 Function OnVideoPlayerStateChange()
     ? "Player State: " ; m.videoPlayer.state
-    if m.videoPlayer.state = "error"
+    if m.videoPlayer.state = "error" then
         ' error handling
         m.videoPlayer.visible = false
         HandleVideoStop(false)
-    else if m.videoPlayer.state = "playing"
+    else if m.videoPlayer.state = "playing" then
         ' playback handling
-    else if m.videoPlayer.state = "finished"
+    else if m.videoPlayer.state = "finished" then
         m.videoPlayer.visible = false
         HandleVideoStop(true)
-    else if m.videoPlayer.state = "stopped"
+    else if m.videoPlayer.state = "stopped" then
         m.videoPlayer.visible = false
         HandleVideoStop(false)
     end if
 End Function
 
 Function onVideoVisibleChange()
-    if m.videoPlayer.visible = false and m.top.visible = true
+    if m.videoPlayer.visible = false and m.top.visible = true then
         StopVideo()
     end if
 End Function
 
 Function HandleVideoStop(isFinished as boolean)
+    m.top.playing = false
+
     id = m.focusedContent.id
     position = m.videoPlayer.position
 
@@ -170,6 +166,8 @@ Function PlaySelected(startOver as boolean)
     m.videoPlayer.visible = true
     m.videoPlayer.setFocus(true)
     m.videoPlayer.control = "play"
+
+    m.top.playing = true
 
     if not startOver then
        m.videoPlayer.seek = m.focusedContent.position

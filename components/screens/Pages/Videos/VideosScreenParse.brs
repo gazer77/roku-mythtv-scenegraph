@@ -45,6 +45,7 @@ Function TransFormJson(json as String, host as String, positions as Object)
         position = 0.0
         if positions[video.Id] <> invalid then
             position = positions[video.Id].tofloat()
+            positions.delete(video.id)
         end if
 
         stream = "http://" + host + "/Content/GetVideo?Id=" + video.Id
@@ -84,6 +85,10 @@ Function TransFormJson(json as String, host as String, positions as Object)
     end for
     row.videos.SortBy("Title")
     result.push(row)
+
+    for each id in positions
+        DeletePosition(id)
+    end for
 
     return result
 End Function

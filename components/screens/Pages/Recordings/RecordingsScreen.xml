@@ -11,7 +11,7 @@
         <field id="deleteThreshold" type="float" />
         <!-- Grid Content Node -->
         <field id="content" type="node" alias="RowList.content" />
-
+        <field id="playing" type="boolean" />
         <field id="onContentOptionsDialogButtonSelected" type="int" alias="contentOptionsDialog.buttonSelected" onChange="OnContentOptionsDialogButtonSelected" alwaysNotify="true" />
         <field id="onDeleteDialogButtonSelected" type="int" alias="deleteDialog.buttonSelected" onChange="OnDeleteDialogButtonSelected" alwaysNotify="true" />
     </interface>

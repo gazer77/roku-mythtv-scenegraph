@@ -10,7 +10,7 @@
         <field id="host" type="string" />
         <!-- Grid Content Node -->
         <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
-
+        <field id="playing" type="boolean" />
         <field id="onContentOptionsDialogButtonSelected" type="int" alias="contentOptionsDialog.buttonSelected" onChange="OnContentOptionsDialogButtonSelected" alwaysNotify="true" />
     </interface>
     
