@@ -17,6 +17,7 @@ End Function
 
 Function InitializeMenu()
     m.buttonMenu = m.top.findNode("buttonMenu")
+    m.buttonMenuBackground = m.top.findNode("buttonMenuBackground")
     m.buttonMenu.setFocus(true)
     m.menuItemFocused = false
     m.top.observeField("selectedMenu", "OnSelectedMenuChanged")
@@ -65,6 +66,7 @@ End Function
 Function OnPlaying()
     ? "Playing State Changed"
     m.buttonMenu.visible = not m.currentScreen.playing
+    m.buttonMenuBackground.visible = not m.currentScreen.playing
 End Function
 
 Function OnSelectedMenuChanged()

@@ -18,7 +18,7 @@
         <VideosScreen id="videosScreen" visible="false" />
         <SettingsScreen id="settingsScreen" visible="false" translation="[150,200]" />
 
-        <rectangle color="0x000000C4" width="90" height="720" translation="[20, 0]" />
+        <rectangle id="buttonMenuBackground" color="0x000000C4" width="90" height="720" translation="[20, 0]" />
         <MenuGroup id="buttonMenu" horizAlignment="left" itemSpacings="25" translation="[35,100]" />
     </children>
 </component>
