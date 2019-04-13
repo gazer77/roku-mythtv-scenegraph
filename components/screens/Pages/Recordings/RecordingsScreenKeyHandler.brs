@@ -8,7 +8,7 @@ Function OnKeyEvent(key, press) as Boolean
                 result = true
             end if
         else if key = "play" then
-            if m.top.focusedContent <> invalid
+            if m.focusedContent <> invalid
                 PlaySelected(false)
                 result = true
             end if
