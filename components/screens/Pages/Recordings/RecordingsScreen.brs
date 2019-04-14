@@ -209,7 +209,7 @@ End Function
 Function Delete()
     m.deleteRecordingTask = createObject("roSGNode", "deleteRecordingTask")
     m.deleteRecordingTask.observeField("success","DeleteComplete")
-    m.deleteRecordingTask.host = m.host
+    m.deleteRecordingTask.host = m.top.host
     m.deleteRecordingTask.recordingId = m.focusedContent.id
     m.deleteRecordingTask.Control = "RUN"
 End Function
@@ -243,6 +243,8 @@ Function DeleteComplete()
         else
             RemoveFromRow(itemRow, itemColumn)
         end if
+
+        OnItemFocused()
     end if
 End Function
 

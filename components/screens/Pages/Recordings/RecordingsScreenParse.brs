@@ -55,7 +55,7 @@ Function TransformJson(json as String, host as String, positions as object)
 End Function
 
 Function HandleNewRow(host as string, list as object, rowTitle as string, row as object, recentRow as object)
-    row.SortBy("recordedDate", "r")
+    row.SortBy("recordedDate") ', "r")
 
     contentRow = CreateContentRow(rowTitle)
     contentRow.appendChildren(row)

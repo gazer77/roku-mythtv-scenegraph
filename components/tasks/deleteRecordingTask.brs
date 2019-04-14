@@ -13,7 +13,10 @@ End Function
 Function DeleteRecordingApi(apiUrl, recordingId)
     urlTransfer = CreateObject("roUrlTransfer")
     urlTransfer.SetUrl(apiUrl)
-    response = urlTransfer.PostFromString("RecordedId=" + recordingId + "&ForceDelete=1")
+
+    postData = "RecordedId=" + recordingId + "&ForceDelete=1"
+
+    response = urlTransfer.PostFromString(postData)
     
     if response = 200 then
         return true
